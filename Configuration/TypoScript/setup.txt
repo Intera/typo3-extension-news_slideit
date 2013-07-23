@@ -1,0 +1,39 @@
+
+# ==============================================
+# FE-Plugin configuration for EXT:news
+# ==============================================
+plugin.tx_news {
+
+	persistence {
+		classes {
+			Int\NewsSlideit\Domain\Model\SliderNews {
+				mapping {
+					tableName = tx_news_domain_model_news
+				}
+			}
+		}
+	}
+
+	# ====================================
+	# Settings available inside Controller and View by accessing $this->settings or {settings.xyz}
+	# ====================================
+	settings {
+		sliderImageWidth = 233
+	}
+}
+
+// render the content elements in a mimimalistic way to that they
+// can be used in the teaser
+lib.tx_news_slideit.contentElementRendering = COA
+lib.tx_news_slideit.contentElementRendering {
+
+	// get the news records from the default configuration
+	// but only render the text from the bodytext field
+	10 = < lib.tx_news.contentElementRendering
+	10.conf.tt_content = TEXT
+	10.conf.tt_content.field = bodytext
+
+	// get rid of the HTML
+	stdWrap.stripHtml = 1
+	stdWrap.crop = 200|...
+}

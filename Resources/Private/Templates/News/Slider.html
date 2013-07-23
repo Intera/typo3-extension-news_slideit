@@ -1,0 +1,64 @@
+
+{namespace n=Tx_News_ViewHelpers}
+
+<div class="news-slider">
+
+	<f:for each="{news}" as="newsItem" iteration="newsIteration">
+
+		<section class="news-slider-item">
+
+			<div class="news-slider-image">
+				<n:link newsItem="{newsItem}" settings="{settings}">
+					<f:if condition="{newsItem.sliderImage}">
+						<f:then>
+							<f:image src="{newsItem.sliderImage.publicUrl}" alt="{newsItem.sliderImage.alternative}" title="{newsItem.sliderImage.title}" width="{settings.sliderImageWidth}"/></f:then>
+						<f:else>
+							<f:image src="fileadmin/template/images/news_slider_default.jpg" alt="Standardbild für News" width="{settings.sliderImageWidth}"/>
+						</f:else>
+					</f:if>
+				</n:link>
+			</div>
+
+			<div class="news-slider-contentwrapper">
+
+				<time datetime="{f:format.date(date:newsItem.datetime, format: 'c')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time>
+
+				<header>
+					<h2>
+						<n:link newsItem="{newsItem}" settings="{settings}">
+							{newsItem.title}
+						</n:link>
+					</h2>
+				</header>
+
+				<p>
+					<f:if condition="{newsItem.sliderTeaser}">
+						<f:then>
+							{newsItem.sliderTeaser}
+						</f:then>
+						<f:else>
+							<f:cObject typoscriptObjectPath="lib.tx_news_slideit.contentElementRendering">
+								{newsItem.contentElementIdListForTeaser}
+							</f:cObject>
+						</f:else>
+					</f:if>
+				</p>
+
+				<div class="news-slider-more">
+					<n:link newsItem="{newsItem}" settings="{settings}" title="{f:translate(key:'tx_news_slideit_more_link_title', extensionName:'news_slideit')}">
+						[...]
+					</n:link>
+				</div>
+
+				<div class="news-slider-actions">
+					<div class="news-slider-counter">
+						{newsIteration.cycle} / {newsIteration.total}
+					</div>
+				</div>
+
+			</div>
+
+		</section>
+	</f:for>
+
+</div>

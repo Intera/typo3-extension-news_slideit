@@ -1,0 +1,24 @@
+
+<div class="teaser-text">
+	<f:if condition="{newsItem.hasTeaser}">
+		<f:then>
+			<f:if condition="{newsItem.teaser}">
+				<f:then>
+					<f:if condition="{settings.cropTeaser}">
+						<f:then><f:format.html><f:format.crop maxCharacters="{settings.cropMaxCharacters}" respectWordBoundaries="1">{newsItem.teaser}</f:format.crop></f:format.html></f:then>
+						<f:else><f:format.html>{newsItem.teaser}</f:format.html>></f:else>
+					</f:if>
+				</f:then>
+				<f:else>
+					HEHEHE!
+				</f:else>
+			</f:if>
+		</f:then>
+		<f:else>
+			<f:if condition="{settings.cropBodytext}">
+				<f:then><f:format.html><f:format.crop maxCharacters="{settings.cropMaxCharacters}" respectWordBoundaries="1">{newsItem.bodytext}</f:format.crop></f:format.html></f:then>
+				<f:else><f:format.html>{newsItem.bodytext}</f:format.html></f:else>
+			</f:if>
+		</f:else>
+	</f:if>
+</div>
