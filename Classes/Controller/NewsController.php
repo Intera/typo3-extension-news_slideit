@@ -26,15 +26,32 @@ class NewsController extends \Tx_News_Controller_NewsController {
 
 		parent::setViewConfiguration($view);
 
-		if ($this->actionMethodName === 'sliderAction') {
+		if ($this->actionMethodName === 'sliderAction' || $this->actionMethodName === 'simpleListAction') {
 			$view->setTemplateRootPath(\TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName('EXT:news_slideit/Resources/Private/Templates'));
 			$view->setPartialRootPath(\TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName('EXT:news_slideit/Resources/Private/Partials'));
+		} elseif ($this->actionMethodName === 'listAction') {
+			$view->setPartialRootPath(\TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName('EXT:news_slideit/Resources/Private/Partials'));
 		}
+	}
+
+	public function simpleListAction() {
+
+		$demand = $this->createDemandObjectFromSettings($this->settings);
+		$demand->setLimit(3);
+
+		$sliderNewsRecords = $this->sliderNewsRepository->findDemanded($demand);
+
+		$this->view->assignMultiple(array(
+			'news' => $sliderNewsRecords,
+			'demand' => $demand,
+		));
 	}
 
 	public function sliderAction() {
 
 		$demand = $this->createDemandObjectFromSettings($this->settings);
+		$demand->setLimit(5);
+
 		$sliderNewsRecords = $this->sliderNewsRepository->findDemanded($demand);
 
 		$this->view->assignMultiple(array(

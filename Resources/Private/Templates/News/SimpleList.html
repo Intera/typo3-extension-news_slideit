@@ -1,0 +1,29 @@
+
+{namespace n=Tx_News_ViewHelpers}
+
+<div class="news-simple-list">
+
+	<f:for each="{news}" as="newsItem" iteration="newsIteration">
+
+		<section class="news-simple-list-item">
+
+				<time datetime="{f:format.date(date:newsItem.datetime, format: 'c')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time>
+
+				<header>
+					<h2>
+						<n:link newsItem="{newsItem}" settings="{settings}">
+							{newsItem.title}
+						</n:link>
+					</h2>
+				</header>
+
+				<p class="news-simple-list-item-teaser">
+					<f:cObject typoscriptObjectPath="lib.tx_news_slideit.contentElementRendering">
+						{newsItem.contentElementIdListForTeaser}
+					</f:cObject>
+				</p>
+
+		</section>
+	</f:for>
+
+</div>
