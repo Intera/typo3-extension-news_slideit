@@ -1,7 +1,7 @@
 <?php
 namespace Int\NewsSlideit\Domain\Model;
 
-class SliderNews extends \Tx_News_Domain_Model_News {
+class SliderNews extends \Int\NewsRichteaser\Domain\Model\NewsRichteaser {
 
 	/**
 	 * @var \TYPO3\CMS\Core\Resource\FileReference
@@ -62,8 +62,8 @@ class SliderNews extends \Tx_News_Domain_Model_News {
 
 		/** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
 		$fileRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
-		$teaserContentUids = $this->getContentElementIdListForTeaser();
-		$teaserContentUids = explode(',', $teaserContentUids);
+		$teaserContentUids = $this->getTeaserContentElementIdList();
+		$teaserContentUids = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $teaserContentUids, TRUE);
 
 		foreach ($teaserContentUids as $contentUid)  {
 
