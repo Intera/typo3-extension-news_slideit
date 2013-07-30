@@ -1,29 +1,34 @@
-
 {namespace n=Tx_News_ViewHelpers}
+{namespace sl=Int\NewsSlideit\ViewHelpers}
 
 <div class="news-simple-list">
 
 	<f:for each="{news}" as="newsItem" iteration="newsIteration">
 
-		<section class="news-simple-list-item">
+		<sl:overlayReferencedNews news="{newsItem}" name="overlayedNewsItem">
 
-				<time datetime="{f:format.date(date:newsItem.datetime, format: 'c')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time>
+			<section class="news-simple-list-item">
 
-				<header>
-					<h2>
-						<n:link newsItem="{newsItem}" settings="{settings}">
-							{newsItem.title}
-						</n:link>
-					</h2>
-				</header>
+					<time datetime="{f:format.date(date:overlayedNewsItem.datetime, format: 'c')}"><f:format.date format="%x">{overlayedNewsItem.datetime}</f:format.date></time>
 
-				<p class="news-simple-list-item-teaser">
-					<f:cObject typoscriptObjectPath="lib.tx_news_slideit.contentElementRendering">
-						{newsItem.teaserContentElementIdList}
-					</f:cObject>
-				</p>
+					<header>
+						<h2>
+							<n:link newsItem="{overlayedNewsItem}" settings="{settings}">
+								{overlayedNewsItem.title}
+							</n:link>
+						</h2>
+					</header>
 
-		</section>
+					<p class="news-simple-list-item-teaser">
+						<f:cObject typoscriptObjectPath="lib.tx_news_slideit.contentElementRendering">
+							{overlayedNewsItem.teaserContentElementIdList}
+						</f:cObject>
+					</p>
+
+			</section>
+
+		</sl:overlayReferencedNews>
+
 	</f:for>
 
 </div>

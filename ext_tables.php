@@ -39,11 +39,43 @@ $sliderColumns = array(
 				),
 			),
 		), $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'])
-	)
+	),
+
+	'tx_news_slideit_display_news' => array(
+		'exclude' => 0,
+		'label' => 'Diese News anzeigen',
+		'config' => array(
+			'type' => 'group',
+			'internal_type' => 'db',
+			'allowed' => 'tx_news_domain_model_news',
+			'maxitems' => 1,
+			'wizards' => array(
+				'suggest' => array(
+					'type' => 'suggest',
+				),
+			),
+		),
+	),
 );
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('tx_news_domain_model_news', $sliderColumns);
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTcaSelectItem('tx_news_domain_model_news', 'type', array('Andere News', 'tx_news_slideit_type_other'));
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('tx_news_domain_model_news', '--div--;Slider,tx_news_slideit_slider_teaser,tx_news_slideit_slider_image');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('tx_news_domain_model_news', $sliderColumns);
+
+$GLOBALS['TCA']['tx_news_domain_model_news']['types']['tx_news_slideit_type_other'] = array(
+	'showitem' => 'l10n_parent, l10n_diffsource,
+			title;;paletteCoreWithoutTopNews,;;;;2-2-2, tx_news_slideit_display_news;;paletteNavtitle,;;;;3-3-3,
+
+		--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.access,
+			--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.access;paletteAccess,
+
+		--div--;LLL:EXT:cms/locallang_tca.xml:pages.tabs.extended,'
+);
+
+$GLOBALS['TCA']['tx_news_domain_model_news']['palettes']['paletteCoreWithoutTopNews'] = array(
+	'showitem' => 'type, sys_language_uid, hidden,',
+	'canNotCollapse' => FALSE
+);
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
 	'tx_news_domain_model_news', 'EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_csh_news.xlf');

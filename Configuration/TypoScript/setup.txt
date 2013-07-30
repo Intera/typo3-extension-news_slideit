@@ -6,8 +6,22 @@ plugin.tx_news {
 
 	persistence {
 		classes {
+
+			Tx_News_Domain_Model_News {
+				subclasses {
+					tx_news_slideit_type_other = Int\NewsSlideit\Domain\Model\NewsOther
+				}
+			}
+
 			Int\NewsSlideit\Domain\Model\SliderNews {
 				mapping {
+					tableName = tx_news_domain_model_news
+				}
+			}
+
+			Int\NewsSlideit\Domain\Model\NewsOther {
+				mapping {
+					recordType = tx_news_slideit_type_other
 					tableName = tx_news_domain_model_news
 				}
 			}
