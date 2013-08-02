@@ -9,9 +9,8 @@ if (!defined ('TYPO3_MODE')) {
 $sliderColumns = array(
 
 	'tx_news_slideit_slider_teaser' => array(
-		'exclude' => 1,
 		'l10n_mode' => 'noCopy',
-		'label' => $ll . 'Slider Teaser',
+		'label' => 'Slider Teaser',
 		'config' => array(
 			'type' => 'text',
 			'cols' => 30,
@@ -42,7 +41,6 @@ $sliderColumns = array(
 	),
 
 	'tx_news_slideit_display_news' => array(
-		'exclude' => 0,
 		'label' => 'Diese News anzeigen',
 		'config' => array(
 			'type' => 'group',
