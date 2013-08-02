@@ -29,6 +29,10 @@ class NewsController extends \Tx_News_Controller_NewsController {
 		if ($this->actionMethodName === 'sliderAction' || $this->actionMethodName === 'simpleListAction' || $this->actionMethodName === 'listAction') {
 			$view->setTemplateRootPath(\TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName('EXT:news_slideit/Resources/Private/Templates'));
 		}
+
+		if ($this->actionMethodName === 'sliderAction') {
+			$view->setPartialRootPath(\TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName('EXT:news_slideit/Resources/Private/Partials'));
+		}
 	}
 
 	public function simpleListAction() {
