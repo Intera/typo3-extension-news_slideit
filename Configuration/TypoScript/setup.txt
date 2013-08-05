@@ -49,5 +49,4 @@ lib.tx_news_slideit.contentElementRendering {
 
 	// get rid of the HTML
 	stdWrap.stripHtml = 1
-	stdWrap.crop = 200|...
 }

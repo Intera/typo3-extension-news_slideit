@@ -27,23 +27,31 @@
 			</h2>
 		</header>
 
-		<p>
-			<f:if condition="{newsItem.sliderTeaser}">
-				<f:then>
-					{newsItem.sliderTeaser}
-				</f:then>
-				<f:else>
-					<f:cObject typoscriptObjectPath="lib.tx_news_slideit.contentElementRendering">
-						{newsItem.contentElementIdListForTeaser}
-					</f:cObject>
-				</f:else>
-			</f:if>
-		</p>
+		<div class="news-slider-teaser-and-more-link">
 
-		<div class="news-slider-more">
-			<n:link newsItem="{newsItem}" settings="{settings}" title="{f:translate(key:'tx_news_slideit_more_link_title', extensionName:'news_slideit')}">
-				[...]
-			</n:link>
+			<div class="news-slider-teaser">
+
+				<f:if condition="{newsItem.sliderTeaser}">
+					<f:then>
+						{newsItem.sliderTeaser}
+					</f:then>
+					<f:else>
+						<f:cObject typoscriptObjectPath="lib.tx_news_slideit.contentElementRendering">
+							{newsItem.teaserContentElementIdList}
+						</f:cObject>
+					</f:else>
+				</f:if>
+
+				<div class="news-slider-fadeout"></div>
+
+			</div>
+
+			<div class="news-slider-more">
+				<n:link newsItem="{newsItem}" settings="{settings}" title="{f:translate(key:'tx_news_slideit_more_link_title', extensionName:'news_slideit')}">
+					[...]
+				</n:link>
+			</div>
+
 		</div>
 
 		<div class="news-slider-actions">
