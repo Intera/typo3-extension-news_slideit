@@ -12,11 +12,11 @@
 					<time datetime="{f:format.date(date:overlayedNewsItem.datetime, format: 'c')}"><f:format.date format="%x">{overlayedNewsItem.datetime}</f:format.date></time>
 
 					<header>
-						<h2>
+						<h3>
 							<n:link newsItem="{overlayedNewsItem}" settings="{settings}">
 								{overlayedNewsItem.title}
 							</n:link>
-						</h2>
+						</h3>
 					</header>
 
 					<p class="news-simple-list-item-teaser">
@@ -24,6 +24,12 @@
 							{overlayedNewsItem.teaserContentElementIdList}
 						</f:cObject>
 					</p>
+
+					<div class="news-simple-list-more">
+						<n:link newsItem="{newsItem}" settings="{settings}" title="{f:translate(key:'tx_news_slideit_more_link_title', extensionName:'news_slideit')}">
+							[...]
+						</n:link>
+					</div>
 
 			</section>
 
