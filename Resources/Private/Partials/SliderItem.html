@@ -19,15 +19,15 @@
 
 		<time datetime="{f:format.date(date:newsItem.datetime, format: 'c')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time>
 
-		<header>
-			<h2>
-				<n:link newsItem="{newsItem}" settings="{settings}">
-					{newsItem.title}
-				</n:link>
-			</h2>
-		</header>
+		<div class="news-slider-flexible-content">
 
-		<div class="news-slider-teaser-and-more-link">
+			<header>
+				<h2>
+					<n:link newsItem="{newsItem}" settings="{settings}">
+						{newsItem.title}
+					</n:link>
+				</h2>
+			</header>
 
 			<div class="news-slider-teaser">
 
