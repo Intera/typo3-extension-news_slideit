@@ -30,7 +30,7 @@ class NewsController extends \Tx_News_Controller_NewsController {
 			$view->setTemplateRootPath(\TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName('EXT:news_slideit/Resources/Private/Templates'));
 		}
 
-		if ($this->actionMethodName === 'sliderAction') {
+		if ($this->actionMethodName === 'sliderAction' || $this->actionMethodName === 'listAction') {
 			$view->setPartialRootPath(\TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName('EXT:news_slideit/Resources/Private/Partials'));
 		}
 	}
