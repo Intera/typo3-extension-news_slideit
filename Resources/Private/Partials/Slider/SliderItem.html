@@ -1,19 +1,9 @@
 
 {namespace n=Tx_News_ViewHelpers}
 
-<section class="news-slider-item">
+<section class="news-slider-item news-slider-item-in-main-column">
 
-	<div class="news-slider-image">
-		<n:link newsItem="{newsItem}" settings="{settings}">
-			<f:if condition="{newsItem.sliderImage}">
-				<f:then>
-					<f:image src="{newsItem.sliderImage.publicUrl}" alt="{newsItem.sliderImage.alternative}" title="{newsItem.sliderImage.title}" width="{settings.sliderImageWidth}"/></f:then>
-				<f:else>
-					<f:image src="fileadmin/template/images/news_slider_default.jpg" alt="Standardbild für News" width="{settings.sliderImageWidth}"/>
-				</f:else>
-			</f:if>
-		</n:link>
-	</div>
+	<f:render partial="Slider/SliderImage" arguments="{_all}"/>
 
 	<div class="news-slider-contentwrapper">
 

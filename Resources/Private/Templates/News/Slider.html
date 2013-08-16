@@ -11,7 +11,14 @@
 
 				<sl:overlayReferencedNews news="{newsItem}" name="overlayedNewsItem">
 
-					<f:render partial="SliderItem" arguments="{newsItem: overlayedNewsItem, newsIteration: newsIteration}"/>
+					<f:if condition="{inSideColumn}">
+						<f:then>
+							<f:render partial="Slider/SliderItemInSideColumn" arguments="{newsItem: overlayedNewsItem, newsIteration: newsIteration}"/>
+						</f:then>
+						<f:else>
+							<f:render partial="Slider/SliderItem" arguments="{newsItem: overlayedNewsItem, newsIteration: newsIteration}"/>
+						</f:else>
+					</f:if>
 
 				</sl:overlayReferencedNews>
 

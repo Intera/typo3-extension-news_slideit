@@ -1,0 +1,55 @@
+
+{namespace n=Tx_News_ViewHelpers}
+
+<section class="news-slider-item news-slider-item-in-side-column">
+
+	<div class="news-slider-contentwrapper">
+
+		<time datetime="{f:format.date(date:newsItem.datetime, format: 'c')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time>
+
+		<div class="news-slider-flexible-content">
+
+			<header>
+				<h3>
+					<n:link newsItem="{newsItem}" settings="{settings}">
+						{newsItem.title}
+					</n:link>
+				</h3>
+			</header>
+
+			<f:render partial="Slider/SliderImage" arguments="{_all}"/>
+
+			<div class="news-slider-teaser">
+
+				<f:if condition="{newsItem.sliderTeaser}">
+					<f:then>
+						{newsItem.sliderTeaser}
+					</f:then>
+					<f:else>
+						<f:cObject typoscriptObjectPath="lib.tx_news_slideit.contentElementRendering">
+							{newsItem.teaserContentElementIdList}
+						</f:cObject>
+					</f:else>
+				</f:if>
+
+				<div class="news-slider-fadeout"></div>
+
+			</div>
+
+			<div class="news-slider-more">
+				<n:link newsItem="{newsItem}" settings="{settings}" title="{f:translate(key:'tx_news_slideit_more_link_title', extensionName:'news_slideit')}">
+					[...]
+				</n:link>
+			</div>
+
+		</div>
+
+		<div class="news-slider-actions">
+			<div class="news-slider-counter">
+				{newsIteration.cycle} / {newsIteration.total}
+			</div>
+		</div>
+
+	</div>
+
+</section>

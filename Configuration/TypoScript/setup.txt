@@ -32,7 +32,8 @@ plugin.tx_news {
 	# Settings available inside Controller and View by accessing $this->settings or {settings.xyz}
 	# ====================================
 	settings {
-		sliderImageWidth = 233
+		sliderImageWidth = 232c
+		sliderImageHeight = 166c
 	}
 }
 

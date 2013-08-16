@@ -35,6 +35,9 @@ class NewsController extends \Tx_News_Controller_NewsController {
 		}
 	}
 
+	/**
+	 * Renders a simple news list
+	 */
 	public function simpleListAction() {
 
 		$demand = $this->createDemandObjectFromSettings($this->settings);
@@ -48,6 +51,9 @@ class NewsController extends \Tx_News_Controller_NewsController {
 		));
 	}
 
+	/**
+	 * Renders the slider
+	 */
 	public function sliderAction() {
 
 		$demand = $this->createDemandObjectFromSettings($this->settings);
@@ -58,7 +64,21 @@ class NewsController extends \Tx_News_Controller_NewsController {
 		$this->view->assignMultiple(array(
 			'news' => $sliderNewsRecords,
 			'demand' => $demand,
+			'inSideColumn' => $this->inSideColumn(),
 		));
+	}
+
+	/**
+	 * Checks if the current content element was placed in a side column
+	 *
+	 * @return bool TRUE if content element is in side column
+	 */
+	protected function inSideColumn() {
+		$contentObject = $this->configurationManager->getContentObject();
+		$unparsedSettings = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_news.']['settings.'];
+		$mainContentColumns = $contentObject->stdWrap($unparsedSettings['mainContentColumns'], $unparsedSettings['mainContentColumns.']);
+		$inSideColumn = !in_array($contentObject->data['colPos'], \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $mainContentColumns, TRUE));
+		return $inSideColumn;
 	}
 }
 ?>
