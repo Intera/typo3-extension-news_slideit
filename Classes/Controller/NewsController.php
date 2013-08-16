@@ -74,10 +74,16 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	 * @return bool TRUE if content element is in side column
 	 */
 	protected function inSideColumn() {
+
 		$contentObject = $this->configurationManager->getContentObject();
-		$unparsedSettings = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_news.']['settings.'];
-		$mainContentColumns = $contentObject->stdWrap($unparsedSettings['mainContentColumns'], $unparsedSettings['mainContentColumns.']);
+
+		/** @var \TYPO3\CMS\Extbase\Service\TypoScriptService $typoScriptService */
+		$typoScriptService = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService');
+		$settingsAsTypoScriptArray = $typoScriptService->convertPlainArrayToTypoScriptArray($this->settings);
+		$mainContentColumns = $contentObject->stdWrap($settingsAsTypoScriptArray['mainContentColumns'], $settingsAsTypoScriptArray['mainContentColumns.']);
+
 		$inSideColumn = !in_array($contentObject->data['colPos'], \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $mainContentColumns, TRUE));
+
 		return $inSideColumn;
 	}
 }
