@@ -1,7 +1,7 @@
 
 {namespace sl=Int\NewsSlideit\ViewHelpers}
 
-<div class="news-slider">
+<div class="news-slider {f:if(condition: '{inSideColumn}', then: 'news-slider-in-slide-column', else: 'news-slider-in-main-column')}">
 
 	<f:if condition="{news}">
 
