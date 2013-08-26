@@ -12,6 +12,15 @@
 			<trans-unit id="tx_news_slideit_more_link_title" xml:space="preserve">
 				<target>Den aktuellen Newsartikel weiterlesen</target>
 			</trans-unit>
+			<trans-unit id="tx_news_slideit_no_news_seleted_header" xml:space="preserve">
+				<target>Keine News ausgewählt</target>
+			</trans-unit>
+			<trans-unit id="tx_news_slideit_no_news_seleted_description" xml:space="preserve">
+				<target>Sie haben die Detailansicht aufgerufen, ohne die anzuzeigende News zu übermitteln.</target>
+			</trans-unit>
+			<trans-unit id="tx_news_slideit_no_news_seleted_back_link" xml:space="preserve">
+				<target>Bitte kehren Sie zur Listenansicht zurück, um eine News auszuwählen.</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

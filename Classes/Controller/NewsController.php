@@ -26,7 +26,7 @@ class NewsController extends \Tx_News_Controller_NewsController {
 
 		parent::setViewConfiguration($view);
 
-		if ($this->actionMethodName === 'sliderAction' || $this->actionMethodName === 'simpleListAction' || $this->actionMethodName === 'listAction') {
+		if ($this->actionMethodName === 'sliderAction' || $this->actionMethodName === 'simpleListAction' || $this->actionMethodName === 'listAction' || $this->actionMethodName === 'detailAction') {
 			$view->setTemplateRootPath(\TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName('EXT:news_slideit/Resources/Private/Templates'));
 		}
 

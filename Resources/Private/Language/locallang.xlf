@@ -12,6 +12,15 @@
 			<trans-unit id="tx_news_slideit_more_link_title" xml:space="preserve">
 				<source>Continue reading the current news article</source>
 			</trans-unit>
+			<trans-unit id="tx_news_slideit_no_news_seleted_header" xml:space="preserve">
+				<source>No news selected</source>
+			</trans-unit>
+			<trans-unit id="tx_news_slideit_no_news_seleted_description" xml:space="preserve">
+				<source>You navigated to the news detail view without submitting the news that should be displayed.</source>
+			</trans-unit>
+			<trans-unit id="tx_news_slideit_no_news_seleted_back_link" xml:space="preserve">
+				<source>Please return to the list view to select a news.</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

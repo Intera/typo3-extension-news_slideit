@@ -1,0 +1,73 @@
+{namespace n=Tx_News_ViewHelpers}
+
+<f:layout name="Detail.html" />
+
+<!--
+	=====================
+		News/Detail.html
+-->
+
+<f:section name="content">
+	<f:if condition="{newsItem}">
+		<f:then>
+
+			<div class="header">
+				<h1>{newsItem.title}</h1>
+			</div>
+
+			<div class="footer">
+				<p>
+					<!-- date -->
+					<span class="news-list-date">
+						<n:format.date format="{f:translate(key:'dateFormat')}">{newsItem.datetime}</n:format.date>
+					</span>
+
+					<f:if condition="{newsItem.categories}">
+						<f:render partial="Category/Items" arguments="{categories:newsItem.categories, settings:settings}" />
+					</f:if>
+
+					<f:if condition="{newsItem.tags}">
+						<!-- Tags -->
+						<span class="news-list-tags">
+						<f:for each="{newsItem.tags}" as="tag">
+							{tag.title}
+						</f:for>
+						</span>
+					</f:if>
+
+					<f:if condition="{newsItem.author}">
+						<!-- author -->
+						<span class="news-list-author">
+							<f:translate key="author" arguments="{0:newsItem.author}"></f:translate>
+						</span>
+					</f:if>
+				</p>
+			</div>
+
+			<f:render partial="Detail/Teaser" arguments="{newsItem: newsItem, settings: settings}"/>
+
+			<f:if condition="{newsItem.contentElements}">
+				<!-- content elements -->
+				<f:cObject typoscriptObjectPath="lib.tx_news.contentElementRendering">{newsItem.contentElementIdList}</f:cObject>
+			</f:if>
+
+			<f:if condition="{settings.backPid}">
+				<!-- Link Back -->
+				<div class="news-backlink-wrap">
+					<f:link.page pageUid="{settings.backPid}">
+						<f:translate key="back-link" />
+					</f:link.page>
+				</div>
+			</f:if>
+
+		</f:then>
+		<f:else>
+			<div class="header">
+				<h1><f:translate key="tx_news_slideit_no_news_seleted_header" extensionName="news_slideit"/></h1>
+			</div>
+			<p><f:translate key="tx_news_slideit_no_news_seleted_description" extensionName="news_slideit"/></p>
+			<p><f:link.page pageUid="{settings.backPid}"><f:translate key="tx_news_slideit_no_news_seleted_back_link" extensionName="news_slideit"/></f:link.page></p>
+		</f:else>
+	</f:if>
+
+</f:section>
