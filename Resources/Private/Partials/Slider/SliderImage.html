@@ -5,9 +5,9 @@
 	<n:link newsItem="{newsItem}" settings="{settings}">
 		<f:if condition="{newsItem.sliderImage}">
 			<f:then>
-				<f:image src="{newsItem.sliderImage.publicUrl}" alt="{newsItem.sliderImage.alternative}" title="{newsItem.sliderImage.title}" width="{settings.sliderImageWidth}" height="{settings.sliderImageHeight}"/></f:then>
+				<f:image src="{newsItem.sliderImage.publicUrl}" alt="{newsItem.sliderImage.alternative}" title="{newsItem.sliderImage.title}" width="{columnSettings.sliderImageWidth}" height="{columnSettings.sliderImageHeight}"/></f:then>
 			<f:else>
-				<f:image src="fileadmin/template/images/news_slider_default.jpg" alt="Standardbild für News" />
+				<f:image src="{columnSettings.sliderDefaultImage}" alt="Standardbild für News" />
 			</f:else>
 		</f:if>
 	</n:link>

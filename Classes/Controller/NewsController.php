@@ -60,11 +60,13 @@ class NewsController extends \Tx_News_Controller_NewsController {
 		$demand->setLimit(5);
 
 		$sliderNewsRecords = $this->sliderNewsRepository->findDemanded($demand);
+		$inSideColumn = $this->inSideColumn();
 
 		$this->view->assignMultiple(array(
 			'news' => $sliderNewsRecords,
 			'demand' => $demand,
-			'inSideColumn' => $this->inSideColumn(),
+			'inSideColumn' => $inSideColumn,
+			'columnSettings' => $inSideColumn ? \TYPO3\CMS\Core\Utility\GeneralUtility::array_merge_recursive_overrule($this->settings, $this->settings['sideColumn']) : $this->settings
 		));
 	}
 

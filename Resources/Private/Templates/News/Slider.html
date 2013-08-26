@@ -13,10 +13,10 @@
 
 					<f:if condition="{inSideColumn}">
 						<f:then>
-							<f:render partial="Slider/SliderItemInSideColumn" arguments="{newsItem: overlayedNewsItem, newsIteration: newsIteration}"/>
+							<f:render partial="Slider/SliderItemInSideColumn" arguments="{_all}"/>
 						</f:then>
 						<f:else>
-							<f:render partial="Slider/SliderItem" arguments="{newsItem: overlayedNewsItem, newsIteration: newsIteration}"/>
+							<f:render partial="Slider/SliderItem" arguments="{_all}"/>
 						</f:else>
 					</f:if>
 
