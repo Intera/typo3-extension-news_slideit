@@ -3,6 +3,12 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2011-10-17T20:22:32Z" product-name="news_slideit">
 		<header/>
 		<body>
+			<trans-unit id="news_slider_action" xml:space="preserve">
+				<source>Slider with image</source>
+			</trans-unit>
+			<trans-unit id="news_simple_list_action" xml:space="preserve">
+				<source>Simple list without images</source>
+			</trans-unit>
 			<trans-unit id="tx_news_slideit_more_link_title" xml:space="preserve">
 				<source>Continue reading the current news article</source>
 			</trans-unit>
