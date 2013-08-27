@@ -10,7 +10,7 @@ $sliderColumns = array(
 
 	'tx_news_slideit_slider_teaser' => array(
 		'l10n_mode' => 'noCopy',
-		'label' => 'Slider Teaser',
+		'label' => 'Spezieller Text für den Slider Teaser',
 		'config' => array(
 			'type' => 'text',
 			'cols' => 30,
@@ -19,7 +19,7 @@ $sliderColumns = array(
 	),
 
 	'tx_news_slideit_slider_image' => array(
-		'label' => 'Slider Bild',
+		'label' => 'Spezielles Bild für den Slider Teaser',
 		'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig('tx_news_slideit_slider_image', array(
 			'appearance' => array(
 				'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:images.addFileReference'
@@ -57,7 +57,7 @@ $sliderColumns = array(
 );
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTcaSelectItem('tx_news_domain_model_news', 'type', array('Andere News', 'tx_news_slideit_type_other'));
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('tx_news_domain_model_news', '--div--;Slider,tx_news_slideit_slider_teaser,tx_news_slideit_slider_image');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('tx_news_domain_model_news', '--div--;Spezieller Slider (optional),tx_news_slideit_slider_teaser,tx_news_slideit_slider_image', '', 'after:content_elements');
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('tx_news_domain_model_news', $sliderColumns);
 
 $GLOBALS['TCA']['tx_news_domain_model_news']['types']['tx_news_slideit_type_other'] = array(
