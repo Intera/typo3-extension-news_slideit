@@ -56,7 +56,7 @@ $sliderColumns = array(
 	),
 );
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTcaSelectItem('tx_news_domain_model_news', 'type', array('Andere News', 'tx_news_slideit_type_other'));
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTcaSelectItem('tx_news_domain_model_news', 'type', array('Externe News', 'tx_news_slideit_type_other'));
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('tx_news_domain_model_news', '--div--;Spezieller Slider (optional),tx_news_slideit_slider_teaser,tx_news_slideit_slider_image', '', 'after:content_elements');
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('tx_news_domain_model_news', $sliderColumns);
 
