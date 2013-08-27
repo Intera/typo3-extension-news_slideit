@@ -59,3 +59,9 @@ lib.tx_news_slideit.contentElementRendering {
 	// get rid of the HTML
 	stdWrap.stripHtml = 1
 }
+
+// since the header type can not be changed when the news plugin
+// is selected we override the selected heading with h1
+lib.stdheader.10.key.override = 1
+lib.stdheader.10.key.override.if.value.field = list_type
+lib.stdheader.10.key.override.if.equals = news_pi1
