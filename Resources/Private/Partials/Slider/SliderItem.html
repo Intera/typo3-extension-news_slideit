@@ -9,30 +9,34 @@
 
 		<time datetime="{f:format.date(date:newsItem.datetime, format: 'c')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time>
 
-		<div class="news-slider-flexible-content">
+		<div class="news-slider-fixed-height">
 
-			<header>
-				<h3>
-					<n:link newsItem="{newsItem}" settings="{settings}">
-						{newsItem.title}
-					</n:link>
-				</h3>
-			</header>
+			<div class="news-slider-flexible-content">
 
-			<div class="news-slider-teaser">
+				<header>
+					<h3>
+						<n:link newsItem="{newsItem}" settings="{settings}">
+							{newsItem.title}
+						</n:link>
+					</h3>
+				</header>
 
-				<f:if condition="{newsItem.sliderTeaser}">
-					<f:then>
-						{newsItem.sliderTeaser}
-					</f:then>
-					<f:else>
-						<f:cObject typoscriptObjectPath="lib.tx_news_slideit.contentElementRendering">
-							{newsItem.teaserContentElementIdList}
-						</f:cObject>
-					</f:else>
-				</f:if>
+				<div class="news-slider-teaser">
 
-				<div class="news-slider-fadeout"></div>
+					<f:if condition="{newsItem.sliderTeaser}">
+						<f:then>
+							{newsItem.sliderTeaser}
+						</f:then>
+						<f:else>
+							<f:cObject typoscriptObjectPath="lib.tx_news_slideit.contentElementRendering">
+								{newsItem.teaserContentElementIdList}
+							</f:cObject>
+						</f:else>
+					</f:if>
+
+					<div class="news-slider-fadeout"></div>
+
+				</div>
 
 			</div>
 
