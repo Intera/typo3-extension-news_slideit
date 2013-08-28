@@ -1,6 +1,4 @@
 
-{namespace sl=Int\NewsSlideit\ViewHelpers}
-
 <div class="news-slider {f:if(condition: '{inSideColumn}', then: 'news-slider-in-slide-column', else: 'news-slider-in-main-column')}">
 
 	<f:if condition="{news}">
@@ -9,18 +7,14 @@
 
 			<f:for each="{news}" as="newsItem" iteration="newsIteration">
 
-				<sl:overlayReferencedNews news="{newsItem}" name="overlayedNewsItem">
-
-					<f:if condition="{inSideColumn}">
-						<f:then>
-							<f:render partial="Slider/SliderItemInSideColumn" arguments="{_all}"/>
-						</f:then>
-						<f:else>
-							<f:render partial="Slider/SliderItem" arguments="{_all}"/>
-						</f:else>
-					</f:if>
-
-				</sl:overlayReferencedNews>
+				<f:if condition="{inSideColumn}">
+					<f:then>
+						<f:render partial="Slider/SliderItemInSideColumn" arguments="{_all}"/>
+					</f:then>
+					<f:else>
+						<f:render partial="Slider/SliderItem" arguments="{_all}"/>
+					</f:else>
+				</f:if>
 
 			</f:for>
 

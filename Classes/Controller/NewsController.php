@@ -12,6 +12,13 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	 */
 	protected $sliderNewsRepository;
 
+	/**
+	 * @param \Int\NewsSlideit\Domain\Repository\OverlayNewsRepository $newsRepository
+	 */
+	public function injectNewsRepository(\Int\NewsSlideit\Domain\Repository\OverlayNewsRepository $newsRepository) {
+		$this->newsRepository = $newsRepository;
+	}
+
 	public function injectSliderNewsRepository(\Int\NewsSlideit\Domain\Repository\SliderNewsRepository $sliderNewsRepository) {
 		$this->sliderNewsRepository = $sliderNewsRepository;
 	}

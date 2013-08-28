@@ -1,5 +1,4 @@
 {namespace n=Tx_News_ViewHelpers}
-{namespace sl=Int\NewsSlideit\ViewHelpers}
 
 <f:layout name="General" />
 <!--
@@ -22,11 +21,7 @@
 					<f:else>
 						<n:widget.paginate objects="{news}" as="paginatedNews" configuration="{settings.list.paginate}">
 							<f:for each="{paginatedNews}" as="newsItem">
-								<sl:overlayReferencedNews news="{newsItem}" name="overlayedNewsItem">
-									<f:if condition="{overlayedNewsItem}">
-										<f:render partial="List/Item" arguments="{newsItem: overlayedNewsItem, settings:settings}" />
-									</f:if>
-								</sl:overlayReferencedNews>
+								<f:render partial="List/Item" arguments="{_all}" />
 							</f:for>
 						</n:widget.paginate>
 					</f:else>
