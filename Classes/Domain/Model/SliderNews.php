@@ -40,12 +40,12 @@ class SliderNews extends NewsOther {
 	/**
 	 * @var string
 	 */
-	protected $txNewsSlideitSliderTeaser;
+	protected $sliderTeaser;
 
 	/**
 	 * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
 	 */
-	protected $txNewsSlideitSliderImage;
+	protected $sliderImage;
 
 	/**
 	 * If the user has set a slider image it will be returned.
@@ -115,8 +115,8 @@ class SliderNews extends NewsOther {
 
 		$this->sliderImageFromField = FALSE;
 
-		if (isset($this->txNewsSlideitSliderImage)) {
-			$this->sliderImageFromField = $this->txNewsSlideitSliderImage->getOriginalResource();
+		if (isset($this->sliderImage)) {
+			$this->sliderImageFromField = $this->sliderImage->getOriginalResource();
 		}
 
 		return $this->sliderImageFromField;
@@ -126,6 +126,6 @@ class SliderNews extends NewsOther {
 	 * @return string
 	 */
 	public function getSliderTeaser() {
-		return $this->txNewsSlideitSliderTeaser;
+		return $this->sliderTeaser;
 	}
 }

@@ -30,7 +30,7 @@ class NewsOther extends \Int\NewsRichteaser\Domain\Model\NewsRichteaser {
 	 *
 	 * @var \Tx_News_Domain_Model_News
 	 */
-	protected $txNewsSlideitDisplayNews;
+	protected $displayNews;
 
 	/**
 	 * Return the news that should be displays instead of this
@@ -38,8 +38,8 @@ class NewsOther extends \Int\NewsRichteaser\Domain\Model\NewsRichteaser {
 	 *
 	 * @return \Tx_News_Domain_Model_News
 	 */
-	public function getTxNewsSlideitDisplayNews() {
-		return $this->txNewsSlideitDisplayNews;
+	public function getDisplayNews() {
+		return $this->displayNews;
 	}
 }
 ?>

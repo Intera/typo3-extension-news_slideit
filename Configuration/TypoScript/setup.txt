@@ -16,6 +16,10 @@ plugin.tx_news {
 			Int\NewsSlideit\Domain\Model\SliderNews {
 				mapping {
 					tableName = tx_news_domain_model_news
+					columns {
+						tx_news_slideit_slider_teaser.mapOnProperty = sliderTeaser
+						tx_news_slideit_slider_image.mapOnProperty = sliderImage
+					}
 				}
 			}
 
@@ -23,6 +27,9 @@ plugin.tx_news {
 				mapping {
 					recordType = tx_news_slideit_type_other
 					tableName = tx_news_domain_model_news
+					columns {
+						tx_news_slideit_display_news.mapOnProperty = displayNews
+					}
 				}
 			}
 		}
