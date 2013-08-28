@@ -1,6 +1,16 @@
 <?php
 namespace Int\NewsSlideit\Controller;
 
+/*                                                                        *
+ * This script belongs to the TYPO3 Extension "news_slideit".             *
+ *                                                                        *
+ * It is free software; you can redistribute it and/or modify it under    *
+ * the terms of the GNU General Public License, either version 3 of the   *
+ * License, or (at your option) any later version.                        *
+ *                                                                        *
+ * The TYPO3 project - inspiring people to share!                         *
+ *                                                                        */
+
 /**
  * Controller of news records
  */
@@ -19,11 +29,17 @@ class NewsController extends \Tx_News_Controller_NewsController {
 		$this->newsRepository = $newsRepository;
 	}
 
+	/**
+	 * @param \Int\NewsSlideit\Domain\Repository\SliderNewsRepository $sliderNewsRepository
+	 */
 	public function injectSliderNewsRepository(\Int\NewsSlideit\Domain\Repository\SliderNewsRepository $sliderNewsRepository) {
 		$this->sliderNewsRepository = $sliderNewsRepository;
 	}
 
 	/**
+	 * Overwrites the template / partial directories depending on the
+	 * current action
+	 *
 	 * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
 	 * @return void
 	 */
