@@ -37,28 +37,6 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	}
 
 	/**
-	 * Overwrites the template / partial directories depending on the
-	 * current action
-	 *
-	 * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
-	 * @return void
-	 */
-	protected function setViewConfiguration(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view) {
-
-		/** @var \TYPO3\CMS\Fluid\View\TemplateView $view */
-
-		parent::setViewConfiguration($view);
-
-		if ($this->actionMethodName === 'sliderAction' || $this->actionMethodName === 'simpleListAction' || $this->actionMethodName === 'listAction' || $this->actionMethodName === 'detailAction') {
-			$view->setTemplateRootPath(\TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName('EXT:news_slideit/Resources/Private/Templates'));
-		}
-
-		if ($this->actionMethodName === 'sliderAction' || $this->actionMethodName === 'listAction') {
-			$view->setPartialRootPath(\TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName('EXT:news_slideit/Resources/Private/Partials'));
-		}
-	}
-
-	/**
 	 * Renders a simple news list
 	 */
 	public function simpleListAction() {

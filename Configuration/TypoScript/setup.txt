@@ -4,6 +4,11 @@
 # ==============================================
 plugin.tx_news {
 
+	view.overlays.news_slideit {
+		partialRootPath = EXT:news_slideit/Resources/Private/Partials/
+		templateRootPath = EXT:news_slideit/Resources/Private/Templates/
+	}
+
 	persistence {
 		classes {
 
