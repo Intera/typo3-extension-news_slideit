@@ -22,11 +22,12 @@ class OverlayQuery extends \TYPO3\CMS\Extbase\Persistence\Generic\Query {
 	 * Executes the parent execute() method and returns an
 	 * OverlayQueryResult instead of a normal QueryResult
 	 *
+	 * @param $returnRawQueryResult boolean avoids the object mapping by the persistence
 	 * @return \Int\NewsSlideit\Persistence\OverlayQueryResult
 	 */
-	public function execute() {
+	public function execute($returnRawQueryResult = FALSE) {
 
-		$result = parent::execute();
+		$result = parent::execute($returnRawQueryResult);
 
 		if ($result instanceof \TYPO3\CMS\Extbase\Persistence\QueryResultInterface) {
 			$result = $this->objectManager->get('Int\\NewsSlideit\\Persistence\\OverlayQueryResult', $this);
