@@ -37,6 +37,16 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	}
 
 	/**
+	 * If no backPid was configured we set the backPid to the current
+	 * page so that the back link will always be displayed.
+	 */
+	public function initializeDetailAction() {
+		if (!intval($this->settings['backPid'])) {
+			$this->settings['backPid'] = $GLOBALS['TSFE']->id;
+		}
+	}
+
+	/**
 	 * Renders a simple news list
 	 */
 	public function simpleListAction() {
