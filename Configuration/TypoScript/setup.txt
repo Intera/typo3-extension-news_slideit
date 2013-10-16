@@ -4,9 +4,18 @@
 # ==============================================
 plugin.tx_news {
 
-	view.overlays.news_slideit {
-		partialRootPath = EXT:news_slideit/Resources/Private/Partials/
-		templateRootPath = EXT:news_slideit/Resources/Private/Templates/
+	view {
+		// Clear the old settings because otherwise the overlay mechanism
+		// will not work
+		templateRootPath >
+		partialRootPath >
+
+		// Re-initialize the news paths for the overlay mechanism
+		templateRootPaths.news = {$plugin.tx_news.view.templateRootPath}
+		partialRootPaths.news = {$plugin.tx_news.view.partialRootPath}
+
+		partialRootPaths.news_slideit = EXT:news_slideit/Resources/Private/Partials/
+		templateRootPaths.news_slideit = EXT:news_slideit/Resources/Private/Templates/
 	}
 
 	persistence {
