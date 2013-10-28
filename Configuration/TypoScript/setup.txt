@@ -5,15 +5,8 @@
 plugin.tx_news {
 
 	view {
-		// Clear the old settings because otherwise the overlay mechanism
-		// will not work
-		templateRootPath >
-		partialRootPath >
-
-		// Re-initialize the news paths for the overlay mechanism
-		templateRootPaths.news = {$plugin.tx_news.view.templateRootPath}
-		partialRootPaths.news = {$plugin.tx_news.view.partialRootPath}
-
+		// Just add our paths to the lists, integrator needs to take
+		// care of correct loading order!
 		partialRootPaths.news_slideit = EXT:news_slideit/Resources/Private/Partials/
 		templateRootPaths.news_slideit = EXT:news_slideit/Resources/Private/Templates/
 	}
