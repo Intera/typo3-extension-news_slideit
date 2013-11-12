@@ -7,8 +7,6 @@
 
 	<div class="news-slider-contentwrapper">
 
-		<time datetime="{f:format.date(date:newsItem.datetime, format: 'c')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time>
-
 		<div class="news-slider-fixed-height">
 
 			<div class="news-slider-flexible-content">
@@ -20,6 +18,8 @@
 						</n:link>
 					</h3>
 				</header>
+
+				<p><time datetime="{f:format.date(date:newsItem.datetime, format: 'c')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time></p>
 
 				<div class="news-slider-teaser">
 
