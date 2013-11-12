@@ -5,10 +5,6 @@
 <div class="article articletype-{newsItem.type}{f:if(condition: newsItem.istopnews, then: ' topnews')}">
 	<n:excludeDisplayedNews newsItem="{newsItem}" />
 
-	<span class="news-list-date">
-		<n:format.date format="%x">{newsItem.datetime}</n:format.date>
-	</span>
-
 	<!-- header -->
 	<div class="header">
 		<h3>
@@ -17,6 +13,10 @@
 			</n:link>
 		</h3>
 	</div>
+
+	<p class="news-list-date">
+		<time datetime="{f:format.date(date: newsItem.datetime, format: 'Y-m-d')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time>
+	</p>
 
 	<f:if condition="{newsItem.media}">
 		<!-- media preview element -->
