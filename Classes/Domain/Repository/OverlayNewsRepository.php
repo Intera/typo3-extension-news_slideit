@@ -19,16 +19,6 @@ namespace Int\NewsSlideit\Domain\Repository;
 class OverlayNewsRepository extends \Tx_News_Domain_Repository_NewsRepository {
 
 	/**
-	 * Sets the correct object type (Tx_News_Domain_Model_News)
-	 *
-	 * @param \TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager
-	 */
-	public function __construct(\TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager) {
-		parent::__construct($objectManager);
-		$this->objectType = 'Tx_News_Domain_Model_News';
-	}
-
-	/**
 	 * Calls the parent createQuery() method and replaces the created
 	 * query with an OverlayQuery.
 	 *

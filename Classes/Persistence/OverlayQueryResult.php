@@ -93,5 +93,3 @@ class OverlayQueryResult extends \TYPO3\CMS\Extbase\Persistence\Generic\QueryRes
 		}
 	}
 }
-
-?>

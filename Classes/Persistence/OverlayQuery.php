@@ -36,5 +36,3 @@ class OverlayQuery extends \TYPO3\CMS\Extbase\Persistence\Generic\Query {
 		return $result;
 	}
 }
-
-?>

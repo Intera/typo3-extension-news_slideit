@@ -17,23 +17,13 @@ namespace Int\NewsSlideit\Controller;
 class NewsController extends \Tx_News_Controller_NewsController {
 
 	/**
-	 * @var \Int\NewsSlideit\Domain\Repository\SliderNewsRepository
-	 * @inject
+	 * We override the default injector so that the news controller
+	 * always uses the slider news repository.
+	 *
+	 * @param \Int\NewsSlideit\Domain\Repository\SliderNewsRepository $newsRepository
 	 */
-	protected $sliderNewsRepository;
-
-	/**
-	 * @param \Int\NewsSlideit\Domain\Repository\OverlayNewsRepository $newsRepository
-	 */
-	public function injectNewsRepository(\Int\NewsSlideit\Domain\Repository\OverlayNewsRepository $newsRepository) {
+	public function injectNewsRepository(\Int\NewsSlideit\Domain\Repository\SliderNewsRepository $newsRepository) {
 		$this->newsRepository = $newsRepository;
-	}
-
-	/**
-	 * @param \Int\NewsSlideit\Domain\Repository\SliderNewsRepository $sliderNewsRepository
-	 */
-	public function injectSliderNewsRepository(\Int\NewsSlideit\Domain\Repository\SliderNewsRepository $sliderNewsRepository) {
-		$this->sliderNewsRepository = $sliderNewsRepository;
 	}
 
 	/**
@@ -54,7 +44,7 @@ class NewsController extends \Tx_News_Controller_NewsController {
 		$demand = $this->createDemandObjectFromSettings($this->settings);
 		$demand->setLimit(3);
 
-		$sliderNewsRecords = $this->sliderNewsRepository->findDemanded($demand);
+		$sliderNewsRecords = $this->newsRepository->findDemanded($demand);
 
 		$this->view->assignMultiple(array(
 			'news' => $sliderNewsRecords,
@@ -70,7 +60,7 @@ class NewsController extends \Tx_News_Controller_NewsController {
 		$demand = $this->createDemandObjectFromSettings($this->settings);
 		$demand->setLimit(5);
 
-		$sliderNewsRecords = $this->sliderNewsRepository->findDemanded($demand);
+		$sliderNewsRecords = $this->newsRepository->findDemanded($demand);
 		$inSideColumn = $this->inSideColumn();
 
 		$this->view->assignMultiple(array(
@@ -100,4 +90,3 @@ class NewsController extends \Tx_News_Controller_NewsController {
 		return $inSideColumn;
 	}
 }
-?>

@@ -15,7 +15,14 @@ namespace Int\NewsSlideit\Domain\Model;
  * This news type contains an image and a teaser that should be used
  * when the news is displayed in the slider
  */
-class SliderNews extends NewsOther {
+class SliderNews extends \Int\NewsRichteaser\Domain\Model\NewsRichteaser {
+
+	/**
+	 * News that should be displays instead of this news.
+	 *
+	 * @var \Int\NewsSlideit\Domain\Model\SliderNews
+	 */
+	protected $displayNews;
 
 	/**
 	 * The image for the slider that was found in the referenced
@@ -45,6 +52,16 @@ class SliderNews extends NewsOther {
 	 * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
 	 */
 	protected $sliderImage;
+
+	/**
+	 * Return the news that should be displays instead of this
+	 * news.
+	 *
+	 * @return \Int\NewsSlideit\Domain\Model\SliderNews
+	 */
+	public function getDisplayNews() {
+		return $this->displayNews;
+	}
 
 	/**
 	 * If the user has set a slider image it will be returned.
