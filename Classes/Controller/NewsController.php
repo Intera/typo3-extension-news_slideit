@@ -37,6 +37,23 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	}
 
 	/**
+	 * Overrides the news detail action so that we get a slider
+	 * news domain model instead of a normal one.
+	 *
+	 * This is required because we remove the configuration for all
+	 * other news classes and otherwise we would get a default news
+	 * model which does not have the enhanced teaser handling.
+	 *
+	 * TODO: We can not use the slider news domain model here since it will make problems with the slider image property. More investigaion needed.
+	 *
+	 * @param \Int\NewsRichteaser\Domain\Model\NewsRichteaser $news
+	 * @param integer $currentPage
+	 */
+	public function detailAction(\Int\NewsRichteaser\Domain\Model\NewsRichteaser $news = NULL, $currentPage = 1) {
+		parent::detailAction($news, $currentPage);
+	}
+
+	/**
 	 * Renders a simple news list
 	 */
 	public function simpleListAction() {

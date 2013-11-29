@@ -13,14 +13,12 @@ plugin.tx_news {
 
 	persistence {
 		classes {
-
 			// We unset all existing news class definitions so that all
 			// news will be returned, no matter what type they have
 			Tx_News_Domain_Model_News >
 			Tx_News_Domain_Model_NewsDefault >
 			Tx_News_Domain_Model_NewsExternal >
 			Tx_News_Domain_Model_NewsInternal >
-			Int\NewsRichteaser\Domain\Model\NewsRichteaser >
 
 			// We handle all news as slider news with the additional
 			// slider properties since they do not harm if we do not
