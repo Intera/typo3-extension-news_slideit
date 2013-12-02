@@ -46,10 +46,11 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	 *
 	 * TODO: We can not use the slider news domain model here since it will make problems with the slider image property. More investigaion needed.
 	 *
-	 * @param \Int\NewsRichteaser\Domain\Model\NewsRichteaser $news
+	 * @param \Int\NewsSlideit\Domain\Model\SliderNews $news
 	 * @param integer $currentPage
+	 * @ignorevalidation $news
 	 */
-	public function detailAction(\Int\NewsRichteaser\Domain\Model\NewsRichteaser $news = NULL, $currentPage = 1) {
+	public function detailAction(\Int\NewsSlideit\Domain\Model\SliderNews $news = NULL, $currentPage = 1) {
 		parent::detailAction($news, $currentPage);
 	}
 
