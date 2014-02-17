@@ -5,8 +5,6 @@
 plugin.tx_news {
 
 	view {
-		// Just add our paths to the lists, integrator needs to take
-		// care of correct loading order!
 		partialRootPaths.news_slideit = EXT:news_slideit/Resources/Private/Partials/
 		templateRootPaths.news_slideit = EXT:news_slideit/Resources/Private/Templates/
 	}
