@@ -40,6 +40,11 @@ plugin.tx_news {
 	# ====================================
 	settings {
 
+		defaultLimit {
+			slider = 3
+			simpleList = 3
+		}
+
 		sliderImageWidth = 232c
 		sliderImageHeight = 166c
 		sliderDefaultImage = fileadmin/template/images/news_slider_default.jpg

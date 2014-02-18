@@ -16,6 +16,8 @@ namespace Int\NewsSlideit\Controller;
  */
 class NewsController extends \Tx_News_Controller_NewsController {
 
+	const DEFAULT_LIMIT = 3;
+
 	/**
 	 * We override the default injector so that the news controller
 	 * always uses the slider news repository.
@@ -60,7 +62,7 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	public function simpleListAction() {
 
 		$demand = $this->createDemandObjectFromSettings($this->settings);
-		$demand->setLimit(3);
+		$this->initializeDefaultLimitIfNotSet($demand);
 
 		$sliderNewsRecords = $this->newsRepository->findDemanded($demand);
 
@@ -76,7 +78,7 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	public function sliderAction() {
 
 		$demand = $this->createDemandObjectFromSettings($this->settings);
-		$demand->setLimit(5);
+		$this->initializeDefaultLimitForCurrentActionIfNotSet($demand);
 
 		$sliderNewsRecords = $this->newsRepository->findDemanded($demand);
 		$inSideColumn = $this->inSideColumn();
@@ -87,6 +89,27 @@ class NewsController extends \Tx_News_Controller_NewsController {
 			'inSideColumn' => $inSideColumn,
 			'columnSettings' => $inSideColumn ? \TYPO3\CMS\Core\Utility\GeneralUtility::array_merge_recursive_overrule($this->settings, $this->settings['sideColumn']) : $this->settings
 		));
+	}
+
+	/**
+	 * If no limit is set in the settings we fallback to the defaultLimit
+	 * setting and if this is empty for the current action we use the
+	 * default limit defined in the DEFAULT_LIMIT constant.
+	 *
+	 * @param \Tx_News_Domain_Model_Dto_NewsDemand $demand
+	 */
+	protected function initializeDefaultLimitForCurrentActionIfNotSet($demand) {
+
+		if ($this->settings['limit'] !== '') {
+			return;
+		}
+
+		$controllerActionName = $this->request->getControllerActionName();
+		if (isset($this->settings['defaultLimit'][$controllerActionName])) {
+			$demand->setLimit($this->settings['defaultLimit'][$controllerActionName]);
+		} else {
+			$demand->setLimit(static::DEFAULT_LIMIT);
+		}
 	}
 
 	/**
