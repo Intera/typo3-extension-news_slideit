@@ -62,7 +62,7 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	public function simpleListAction() {
 
 		$demand = $this->createDemandObjectFromSettings($this->settings);
-		$this->initializeDefaultLimitIfNotSet($demand);
+		$this->initializeDefaultLimitForCurrentActionIfNotSet($demand);
 
 		$sliderNewsRecords = $this->newsRepository->findDemanded($demand);
 
