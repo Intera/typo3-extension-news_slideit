@@ -81,3 +81,6 @@ $GLOBALS['TCA']['tx_news_domain_model_news']['palettes']['paletteCoreWithoutTopN
 // hide the header type when the news plugin was selected so that
 // heading 1 will be used always
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['news_pi1'] .= ',header_layout';
+
+// Override the default FlexForm
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue('news_pi1', 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/flexform_news.xml');
