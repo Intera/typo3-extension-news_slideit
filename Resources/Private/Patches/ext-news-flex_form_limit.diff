@@ -1,0 +1,45 @@
+diff --git Configuration/FlexForms/flexform_news.xml Configuration/FlexForms/flexform_news.xml
+index ee110c5..9bb0538 100644
+--- Configuration/FlexForms/flexform_news.xml
++++ Configuration/FlexForms/flexform_news.xml
+@@ -395,6 +395,21 @@
+ 						</TCEforms>
+ 					</settings.recursive>
+ 
++					<!-- Limit Start -->
++					<settings.limit>
++						<TCEforms>
++							<label>LLL:EXT:news/Resources/Private/Language/locallang_be.xml:flexforms_additional.limit</label>
++							<config>
++								<type>input</type>
++								<size>5</size>
++								<eval>num</eval>
++							</config>
++							<!-- Modification by intera - BEGIN -->
++							<displayCond><![CDATA[FIELD:switchableControllerActions:=:News->simpleList]]></displayCond>
++							<!-- Modification by intera - END -->
++						</TCEforms>
++					</settings.limit>
++
+ 				</el>
+ 			</ROOT>
+ 		</sDEF>
+@@ -475,18 +490,6 @@
+ 						</TCEforms>
+ 					</settings.backPid>
+ 
+-					<!-- Limit Start -->
+-					<settings.limit>
+-						<TCEforms>
+-							<label>LLL:EXT:news/Resources/Private/Language/locallang_be.xml:flexforms_additional.limit</label>
+-							<config>
+-								<type>input</type>
+-								<size>5</size>
+-								<eval>num</eval>
+-							</config>
+-						</TCEforms>
+-					</settings.limit>
+-
+ 					<!-- Offset -->
+ 					<settings.offset>
+ 						<TCEforms>
