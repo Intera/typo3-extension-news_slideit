@@ -21,6 +21,9 @@
 			<trans-unit id="tx_news_slideit_no_news_seleted_back_link" xml:space="preserve">
 				<source>Please return to the list view to select a news.</source>
 			</trans-unit>
+			<trans-unit id="no_news_available" xml:space="preserve">
+				<source>Currently no news are available.</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

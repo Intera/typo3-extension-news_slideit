@@ -2,34 +2,45 @@
 
 <div class="news-simple-list">
 
-	<f:for each="{news}" as="newsItem" iteration="newsIteration">
+	<f:if condition="{news}">
 
-		<section class="news-simple-list-item">
+		<f:then>
+			<f:for each="{news}" as="newsItem" iteration="newsIteration">
 
-			<header>
-				<h3>
-					<n:link newsItem="{newsItem}" settings="{settings}">
-						{newsItem.title}
-					</n:link>
-				</h3>
-			</header>
+				<section class="news-simple-list-item">
 
-			<p class="news-simple-list-datetime"><time datetime="{f:format.date(date:newsItem.datetime, format: 'c')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time></p>
+					<header>
+						<h3>
+							<n:link newsItem="{newsItem}" settings="{settings}">
+								{newsItem.title}
+							</n:link>
+						</h3>
+					</header>
 
-			<p class="news-simple-list-item-teaser">
-				<f:cObject typoscriptObjectPath="lib.tx_news_slideit.contentElementRendering">
-					{newsItem.teaserContentElementIdList}
-				</f:cObject>
-			</p>
+					<p class="news-simple-list-datetime"><time datetime="{f:format.date(date:newsItem.datetime, format: 'c')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time></p>
 
-			<div class="news-simple-list-more">
-				<n:link newsItem="{newsItem}" settings="{settings}" title="{f:translate(key:'tx_news_slideit_more_link_title', extensionName:'news_slideit')}">
-					[...]
-				</n:link>
+					<p class="news-simple-list-item-teaser">
+						<f:cObject typoscriptObjectPath="lib.tx_news_slideit.contentElementRendering">
+							{newsItem.teaserContentElementIdList}
+						</f:cObject>
+					</p>
+
+					<div class="news-simple-list-more">
+						<n:link newsItem="{newsItem}" settings="{settings}" title="{f:translate(key:'tx_news_slideit_more_link_title', extensionName:'news_slideit')}">
+							[...]
+						</n:link>
+					</div>
+
+				</section>
+
+			</f:for>
+		</f:then>
+
+		<f:else>
+			<div class="news-no-news-message news-simple-list-no-news-message">
+				<p><f:translate key="no_news_available" extensionName="NewsSlideit"/></p>
 			</div>
+		</f:else>
 
-		</section>
-
-	</f:for>
-
+	</f:if>
 </div>
