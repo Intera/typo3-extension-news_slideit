@@ -1,5 +1,5 @@
 <?php
-namespace Int\NewsSlideit\Domain\Repository;
+namespace Int\NewsSlideit\ViewHelpers;
 
 /*                                                                        *
  * This script belongs to the TYPO3 Extension "news_slideit".             *
@@ -11,25 +11,20 @@ namespace Int\NewsSlideit\Domain\Repository;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 /**
- * Enhances the default news repository and modifieds the createQuery()
- * method. It will return an OverlayQuery instead of a default Query
- * object.
+ * This view helper parses the given path through GeneralUtility::locationHeaderUrl().
  */
-class OverlayNewsRepository extends \Tx_News_Domain_Repository_NewsRepository {
+class LocationHeaderUrlViewHelper extends AbstractViewHelper {
 
 	/**
-	 * Calls the parent createQuery() method and replaces the created
-	 * query with an OverlayQuery.
+	 * Parses the given path through GeneralUtility::locationHeaderUrl().
 	 *
-	 * @return \Int\NewsSlideit\Persistence\OverlayQuery
+	 * @param string $path
+	 * @return string
 	 */
-	public function createQuery() {
-		$query = parent::createQuery();
-		$overlayQuery = $this->objectManager->get('Int\\NewsSlideit\\Persistence\\OverlayQuery', $this->objectType);
-		$overlayQuery->setQuerySettings($query->getQuerySettings());
-		return $overlayQuery;
+	public function render($path) {
+		return \TYPO3\CMS\Core\Utility\GeneralUtility::locationHeaderUrl($path);
 	}
 }
-
-?>

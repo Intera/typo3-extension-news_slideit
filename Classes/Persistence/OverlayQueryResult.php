@@ -11,18 +11,14 @@ namespace Int\NewsSlideit\Persistence;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
+
 /**
  * Enhances the default Extbase QueryResult. When the initialize()
  * method is called all NewsOther records will be replaced with their
  * referenced news record.
  */
-class OverlayQueryResult extends \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult {
-
-	/**
-	 * @inject
-	 * @var \Int\NewsSlideit\Domain\Repository\OverlayNewsRepository
-	 */
-	protected $newsRepository;
+class OverlayQueryResult extends QueryResult {
 
 	/**
 	 * @inject
@@ -31,15 +27,21 @@ class OverlayQueryResult extends \TYPO3\CMS\Extbase\Persistence\Generic\QueryRes
 	protected $sliderNewsRepository;
 
 	/**
-	 * Enhances the default initialize function and overlays the found
-	 * "NewsOther" records with the actual news
+	 * Disables the given news and appends a error message to the news
+	 * title.
+	 *
+	 * @param \Int\NewsSlideit\Domain\Model\SliderNews $news
+	 * @return void
 	 */
-	protected function initialize() {
-
-		if (!is_array($this->queryResult)) {
-			parent::initialize();
-			$this->queryResult = $this->getOverlayedNews();
+	protected function disableInvalidNews($news) {
+		$title = $news->getTitle();
+		$appendToTitle = '[Automatisch verborgen, referenzierte News nicht verfügbar]';
+		if (strpos($title, $appendToTitle) === FALSE) {
+			$title .= ' ' . $appendToTitle;
+			$news->setTitle($title);
 		}
+		$news->setHidden(1);
+		$this->sliderNewsRepository->updateAndPersist($news);
 	}
 
 	/**
@@ -52,15 +54,14 @@ class OverlayQueryResult extends \TYPO3\CMS\Extbase\Persistence\Generic\QueryRes
 
 		$overlayedResult = array();
 
-		/** @var \Int\NewsSlideit\Domain\Model\NewsOther $news */
+		/** @var \Int\NewsSlideit\Domain\Model\SliderNews $news */
 		foreach ($this->queryResult as $news) {
 
 			if ($news->getType() === 'tx_news_slideit_type_other') {
-
-				$displayNews = $news->getDisplayNews();
-
 				if (isset($displayNews)) {
-					$overlayedResult[] = $news->getDisplayNews();
+					$displayNews = clone($news->getDisplayNews());
+					$displayNews->setOriginalUid($news->getUid());
+					$overlayedResult[] = $displayNews;
 				} else {
 					$this->disableInvalidNews($news);
 				}
@@ -73,23 +74,14 @@ class OverlayQueryResult extends \TYPO3\CMS\Extbase\Persistence\Generic\QueryRes
 	}
 
 	/**
-	 * Disables the given news and appends a error message to the news
-	 * title.
-	 *
-	 * @param \Int\NewsSlideit\Domain\Model\NewsOther $news
-	 * @return void
+	 * Enhances the default initialize function and overlays the found
+	 * "NewsOther" records with the actual news
 	 */
-	protected function disableInvalidNews($news) {
+	protected function initialize() {
 
-		$title = $news->getTitle();
-		$title .= ' [Automatisch verborgen, referenzierte News nicht verfügbar]';
-		$news->setTitle($title);
-		$news->setHidden(1);
-
-		if ($news instanceof \Int\NewsSlideit\Domain\Model\SliderNews) {
-			$this->sliderNewsRepository->update($news);
-		} else {
-			$this->newsRepository->update($news);
+		if (!is_array($this->queryResult)) {
+			parent::initialize();
+			$this->queryResult = $this->getOverlayedNews();
 		}
 	}
 }

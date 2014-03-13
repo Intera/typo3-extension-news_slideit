@@ -1,0 +1,6 @@
+{namespace n=Tx_News_ViewHelpers}
+<f:if condition="{settings.list.rss.disable}" then="">
+	<f:else>
+		<n:headerData><link rel="alternate" type="application/rss+xml" title="{rssTitle}" href="{f:uri.page(pageUid: '{contentObjectData.pid}', pageType: '2457', additionalParams:'{content: \'{contentObjectData.uid}\'}')}" /></n:headerData>
+	</f:else>
+</f:if>

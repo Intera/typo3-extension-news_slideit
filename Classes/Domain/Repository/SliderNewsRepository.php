@@ -14,5 +14,28 @@ namespace Int\NewsSlideit\Domain\Repository;
 /**
  * Respository for slider news
  */
-class SliderNewsRepository extends OverlayNewsRepository {
+class SliderNewsRepository extends \Tx_News_Domain_Repository_NewsRepository {
+
+	/**
+	 * Calls the parent createQuery() method and replaces the created
+	 * query with an OverlayQuery.
+	 *
+	 * @return \Int\NewsSlideit\Persistence\OverlayQuery
+	 */
+	public function createQuery() {
+		$query = parent::createQuery();
+		$overlayQuery = $this->objectManager->get('Int\\NewsSlideit\\Persistence\\OverlayQuery', $this->objectType);
+		$overlayQuery->setQuerySettings($query->getQuerySettings());
+		return $overlayQuery;
+	}
+
+	/**
+	 * Updates the given slider news in the repository and persists the changes directly.
+	 *
+	 * @param \Int\NewsSlideit\Domain\Model\SliderNews $sliderNews
+	 */
+	public function updateAndPersist($sliderNews) {
+		$this->update($sliderNews);
+		$this->persistenceManager->persistAll();
+	}
 }

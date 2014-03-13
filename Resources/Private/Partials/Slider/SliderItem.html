@@ -22,18 +22,7 @@
 				<p><time datetime="{f:format.date(date:newsItem.datetime, format: 'c')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time></p>
 
 				<div class="news-slider-teaser">
-
-					<f:if condition="{newsItem.sliderTeaser}">
-						<f:then>
-							{newsItem.sliderTeaser}
-						</f:then>
-						<f:else>
-							<f:cObject typoscriptObjectPath="lib.tx_news_slideit.contentElementRendering">
-								{newsItem.teaserContentElementIdList}
-							</f:cObject>
-						</f:else>
-					</f:if>
-
+					<f:render partial="Slider/SliderTeaser" arguments="{_all}" />
 				</div>
 
 				<div class="news-slider-fadeout"></div>

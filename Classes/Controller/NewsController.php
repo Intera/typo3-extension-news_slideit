@@ -11,22 +11,14 @@ namespace Int\NewsSlideit\Controller;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Controller of news records
  */
 class NewsController extends \Tx_News_Controller_NewsController {
 
 	const DEFAULT_LIMIT = 3;
-
-	/**
-	 * We override the default injector so that the news controller
-	 * always uses the slider news repository.
-	 *
-	 * @param \Int\NewsSlideit\Domain\Repository\SliderNewsRepository $newsRepository
-	 */
-	public function injectNewsRepository(\Int\NewsSlideit\Domain\Repository\SliderNewsRepository $newsRepository) {
-		$this->newsRepository = $newsRepository;
-	}
 
 	/**
 	 * If no backPid was configured we set the backPid to the current
@@ -39,14 +31,33 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	}
 
 	/**
+	 * Initialize common view variables.
+	 * Currently only the RSS title is initialized.
+	 *
+	 * @param \Tx_Extbase_MVC_View_ViewInterface $view
+	 */
+	public function initializeView(\Tx_Extbase_MVC_View_ViewInterface $view) {
+		parent::initializeView($view);
+		$this->initializeRssTitle($view);
+	}
+
+	/**
+	 * We override the default injector so that the news controller
+	 * always uses the slider news repository.
+	 *
+	 * @param \Int\NewsSlideit\Domain\Repository\SliderNewsRepository $newsRepository
+	 */
+	public function injectNewsRepository(\Int\NewsSlideit\Domain\Repository\SliderNewsRepository $newsRepository) {
+		$this->newsRepository = $newsRepository;
+	}
+
+	/**
 	 * Overrides the news detail action so that we get a slider
 	 * news domain model instead of a normal one.
 	 *
 	 * This is required because we remove the configuration for all
 	 * other news classes and otherwise we would get a default news
 	 * model which does not have the enhanced teaser handling.
-	 *
-	 * TODO: We can not use the slider news domain model here since it will make problems with the slider image property. More investigaion needed.
 	 *
 	 * @param \Int\NewsSlideit\Domain\Model\SliderNews $news
 	 * @param integer $currentPage
@@ -57,9 +68,38 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	}
 
 	/**
+	 * Output a list view of news
+	 *
+	 * @param array $overwriteDemand
+	 * @return void
+	 */
+	public function listAction(array $overwriteDemand = NULL) {
+
+		// Override demand settings and initialize required view variables for RSS feeds.
+		if (!$this->isHtmlFormat()) {
+
+			$this->view->assign('language', $this->getTypoScriptFrontendController()->lang);
+			$this->view->assign('currentUrl', GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL'));
+
+			$this->settings['disableOverrideDemand'] = 0;
+			$overwriteDemand = array(
+				'limit' => $this->settings['defaultLimit']['rss'],
+				'offset' => 0,
+				'order' => 'datetime desc'
+			);
+		}
+
+		parent::listAction($overwriteDemand);
+	}
+
+	/**
 	 * Renders a simple news list
 	 */
 	public function simpleListAction() {
+
+		if (!$this->isHtmlFormat()) {
+			$this->forward('list');
+		}
 
 		$demand = $this->createDemandObjectFromSettings($this->settings);
 		$this->initializeDefaultLimitForCurrentActionIfNotSet($demand);
@@ -76,6 +116,10 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	 * Renders the slider
 	 */
 	public function sliderAction() {
+
+		if (!$this->isHtmlFormat()) {
+			$this->forward('list');
+		}
 
 		$demand = $this->createDemandObjectFromSettings($this->settings);
 		$this->initializeDefaultLimitForCurrentActionIfNotSet($demand);
@@ -94,6 +138,32 @@ class NewsController extends \Tx_News_Controller_NewsController {
 			'inSideColumn' => $inSideColumn,
 			'columnSettings' => $columnSettings
 		));
+	}
+
+	/**
+	 * @return \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
+	 */
+	protected function getTypoScriptFrontendController() {
+		return $GLOBALS['TSFE'];
+	}
+
+	/**
+	 * Checks if the current content element was placed in a side column
+	 *
+	 * @return bool TRUE if content element is in side column
+	 */
+	protected function inSideColumn() {
+
+		$contentObject = $this->configurationManager->getContentObject();
+
+		/** @var \TYPO3\CMS\Extbase\Service\TypoScriptService $typoScriptService */
+		$typoScriptService = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService');
+		$settingsAsTypoScriptArray = $typoScriptService->convertPlainArrayToTypoScriptArray($this->settings);
+		$mainContentColumns = $contentObject->stdWrap($settingsAsTypoScriptArray['mainContentColumns'], $settingsAsTypoScriptArray['mainContentColumns.']);
+
+		$inSideColumn = !in_array($contentObject->data['colPos'], GeneralUtility::trimExplode(',', $mainContentColumns, TRUE));
+
+		return $inSideColumn;
 	}
 
 	/**
@@ -118,21 +188,32 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	}
 
 	/**
-	 * Checks if the current content element was placed in a side column
+	 * Initializes the title for the RSS feed of the current action consisting
+	 * of the page title and the content element header.
 	 *
-	 * @return bool TRUE if content element is in side column
+	 * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
 	 */
-	protected function inSideColumn() {
+	protected function initializeRssTitle(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view) {
 
-		$contentObject = $this->configurationManager->getContentObject();
+		if (!empty($this->settings['list']['rss']['channel']['title'])) {
+			$view->assign('rssTitle', $this->settings['list']['rss']['channel']['title']);
+			return;
+		}
 
-		/** @var \TYPO3\CMS\Extbase\Service\TypoScriptService $typoScriptService */
-		$typoScriptService = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService');
-		$settingsAsTypoScriptArray = $typoScriptService->convertPlainArrayToTypoScriptArray($this->settings);
-		$mainContentColumns = $contentObject->stdWrap($settingsAsTypoScriptArray['mainContentColumns'], $settingsAsTypoScriptArray['mainContentColumns.']);
+		$rssTitle = $this->configurationManager->getContentObject()->data['header'];
 
-		$inSideColumn = !in_array($contentObject->data['colPos'], \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $mainContentColumns, TRUE));
+		\TYPO3\CMS\Frontend\Page\PageGenerator::generatePageTitle();
+		$rssTitle .= ' - ' . $this->getTypoScriptFrontendController()->getPageRenderer()->getTitle();
 
-		return $inSideColumn;
+		$view->assign('rssTitle', $rssTitle);
+	}
+
+	/**
+	 * Returns TRUE if the current request format is "html" or not set.
+	 *
+	 * @return bool
+	 */
+	protected function isHtmlFormat() {
+		return !(isset($this->settings['format']) && $this->settings['format'] !== 'html');
 	}
 }

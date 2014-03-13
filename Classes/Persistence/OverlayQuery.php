@@ -11,12 +11,15 @@ namespace Int\NewsSlideit\Persistence;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use TYPO3\CMS\Extbase\Persistence\Generic\Query;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+
 /**
  * Extends the default extbase query. The only difference is that it
  * will return an OverlayQueryResult instead of a normal QueryResult
  * when calling the execute() method.
  */
-class OverlayQuery extends \TYPO3\CMS\Extbase\Persistence\Generic\Query {
+class OverlayQuery extends Query {
 
 	/**
 	 * Executes the parent execute() method and returns an
@@ -29,7 +32,7 @@ class OverlayQuery extends \TYPO3\CMS\Extbase\Persistence\Generic\Query {
 
 		$result = parent::execute($returnRawQueryResult);
 
-		if ($result instanceof \TYPO3\CMS\Extbase\Persistence\QueryResultInterface) {
+		if ($result instanceof QueryResultInterface) {
 			$result = $this->objectManager->get('Int\\NewsSlideit\\Persistence\\OverlayQueryResult', $this);
 		}
 

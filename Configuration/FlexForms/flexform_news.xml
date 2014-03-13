@@ -612,5 +612,45 @@
 				</el>
 			</ROOT>
 		</template>
+
+		<!-- Modification by intera - BEGIN -->
+		<rss>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>RSS</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<settings.list.rss.channel.description>
+						<TCEforms>
+							<label>Beschreibung des RSS Feeds</label>
+							<config>
+								<type>input</type>
+								<size>50</size>
+							</config>
+						</TCEforms>
+					</settings.list.rss.channel.description>
+					<settings.list.rss.channel>
+						<TCEforms>
+							<label>Titel des RSS Feeds überschreiben (als Standard wird die Überschrift verwendet)</label>
+							<config>
+								<type>input</type>
+							</config>
+						</TCEforms>
+					</settings.list.rss.channel>
+					<settings.list.rss.disable>
+						<TCEforms>
+							<label>RSS Feed deaktivieren</label>
+							<config>
+								<type>check</type>
+								<default />
+							</config>
+						</TCEforms>
+					</settings.list.rss.disable>
+				</el>
+			</ROOT>
+		</rss>
+		<!-- Modification by intera - END -->
+
 	</sheets>
 </T3DataStructure>

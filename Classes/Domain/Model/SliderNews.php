@@ -11,11 +11,13 @@ namespace Int\NewsSlideit\Domain\Model;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use Int\NewsRichteaser\Domain\Model\NewsRichteaser;
+
 /**
  * This news type contains an image and a teaser that should be used
  * when the news is displayed in the slider
  */
-class SliderNews extends \Int\NewsRichteaser\Domain\Model\NewsRichteaser {
+class SliderNews extends NewsRichteaser {
 
 	/**
 	 * News that should be displays instead of this news.
@@ -23,6 +25,21 @@ class SliderNews extends \Int\NewsRichteaser\Domain\Model\NewsRichteaser {
 	 * @var \Int\NewsSlideit\Domain\Model\SliderNews
 	 */
 	protected $displayNews;
+
+	/**
+	 * If this news is overlayed this field contains the UID of the
+	 * original news record.
+	 *
+	 * @var int
+	 */
+	protected $originalUid = NULL;
+
+	/**
+	 * The slider image that was set in the news properties
+	 *
+	 * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
+	 */
+	protected $sliderImage;
 
 	/**
 	 * The image for the slider that was found in the referenced
@@ -45,13 +62,6 @@ class SliderNews extends \Int\NewsRichteaser\Domain\Model\NewsRichteaser {
 	 * @var string
 	 */
 	protected $sliderTeaser;
-
-	/**
-	 * The slider image that was set in the news properties
-	 *
-	 * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
-	 */
-	protected $sliderImage;
 
 	/**
 	 * Return the news that should be displays instead of this
@@ -105,7 +115,7 @@ class SliderNews extends \Int\NewsRichteaser\Domain\Model\NewsRichteaser {
 		$teaserContentUids = $this->getTeaserContentElementIdList();
 		$teaserContentUids = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $teaserContentUids, TRUE);
 
-		foreach ($teaserContentUids as $contentUid)  {
+		foreach ($teaserContentUids as $contentUid) {
 
 			$imageFiles = $fileRepository->findByRelation('tt_content', 'image', $contentUid);
 
@@ -142,11 +152,35 @@ class SliderNews extends \Int\NewsRichteaser\Domain\Model\NewsRichteaser {
 	}
 
 	/**
-	 * Returns the slider teaser
+	 * Returns the slider teaser.
 	 *
 	 * @return string
 	 */
 	public function getSliderTeaser() {
 		return $this->sliderTeaser;
+	}
+
+	/**
+	 * Returns a unique ID of the news.
+	 *
+	 * When overlayed news are used it can happen that a UID appears multiple times.
+	 * This is why this method prepends the original UID if the news was overlayed.
+	 */
+	public function getUniqueId() {
+		$uniqueId = $this->getUid();
+		if (isset($this->originalUid)) {
+			$uniqueId = $this->originalUid . '-' . $uniqueId;
+		}
+		return $uniqueId;
+	}
+
+	/**
+	 * This setter can be used by the overlay mechanism to set the originally requested news ID
+	 * that was overlayed by this one.
+	 *
+	 * @param int $originalUid
+	 */
+	public function setOriginalUid($originalUid) {
+		$this->originalUid = $originalUid;
 	}
 }

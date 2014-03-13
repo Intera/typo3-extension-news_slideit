@@ -43,6 +43,7 @@ plugin.tx_news {
 		defaultLimit {
 			slider = 3
 			simpleList = 3
+			rss = 10
 		}
 
 		sliderImageWidth = 232c
@@ -53,6 +54,15 @@ plugin.tx_news {
 			sliderImageWidth = 222c
 			sliderImageHeight = 159c
 			sliderDefaultImage = fileadmin/template/images/news_slider_default_side_column.jpg
+		}
+
+		list.rss {
+			disable = 0
+			channel {
+				title =
+				description =
+				copyright = Universität Flensburg
+			}
 		}
 	}
 }

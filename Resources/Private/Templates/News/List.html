@@ -1,5 +1,7 @@
 {namespace n=Tx_News_ViewHelpers}
 
+<f:render partial="List/RssLink" arguments="{_all}" />
+
 <f:layout name="General" />
 <!--
 	=====================
@@ -13,9 +15,7 @@
 				<f:if condition="{settings.hidePagination}">
 					<f:then>
 						<f:for each="{news}" as="newsItem">
-							<sl:overlayReferencedNews news="{newsItem}" name="overlayedNewsItem">
-								<f:render partial="List/Item" arguments="{newsItem: overlayedNewsItem, settings:settings}" />
-							</sl:overlayReferencedNews>
+							<f:render partial="List/Item" arguments="{newsItem: overlayedNewsItem, settings:settings}" />
 						</f:for>
 					</f:then>
 					<f:else>
