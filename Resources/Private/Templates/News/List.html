@@ -1,7 +1,5 @@
 {namespace n=Tx_News_ViewHelpers}
 
-<f:render partial="List/RssLink" arguments="{_all}" />
-
 <f:layout name="General" />
 <!--
 	=====================
@@ -9,6 +7,7 @@
 -->
 
 <f:section name="content">
+	<f:render partial="List/RssLink" arguments="{_all}" />
 	<f:if condition="{news}">
 		<f:then>
 			<div class="news-list-view">
