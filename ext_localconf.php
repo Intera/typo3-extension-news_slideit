@@ -10,3 +10,5 @@ $GLOBALS['TYPO3_CONF_VARS']['EXT']['news']['switchableControllerActions']['newIt
 /** @var \TYPO3\CMS\Extbase\Object\Container\Container $extbaseObjectContainer */
 $extbaseObjectContainer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\Container\\Container');
 $extbaseObjectContainer->registerImplementation('Tx_News_Controller_NewsController', 'Int\\NewsSlideit\\Controller\\NewsController');
+
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['ext_news_slideit_flexformrsstitle'] = 'Int\\NewsSlideit\\Install\\FlexFormRssTitleUpdate';

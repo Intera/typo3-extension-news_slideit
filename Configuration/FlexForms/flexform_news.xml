@@ -647,14 +647,14 @@
 							</config>
 						</TCEforms>
 					</settings.list.rss.channel.description>
-					<settings.list.rss.channel>
+					<settings.list.rss.channel.title>
 						<TCEforms>
 							<label>Titel des RSS Feeds überschreiben (als Standard wird die Überschrift verwendet)</label>
 							<config>
 								<type>input</type>
 							</config>
 						</TCEforms>
-					</settings.list.rss.channel>
+					</settings.list.rss.channel.title>
 					<settings.list.rss.disable>
 						<TCEforms>
 							<label>RSS Feed deaktivieren</label>
