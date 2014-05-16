@@ -11,9 +11,7 @@
 					</f:if>
 				</f:then>
 				<f:else>
-					<f:cObject typoscriptObjectPath="lib.tx_news.contentElementRenderingTeaser">
-						{newsItem.teaserContentElementIdList}
-					</f:cObject>
+					<f:cObject typoscriptObjectPath="lib.tx_news.contentElementRenderingTeaser" data="{newsUid: newsItem.uidLocalized, newsPid: newsItem.pid}" />
 				</f:else>
 			</f:if>
 		</f:then>

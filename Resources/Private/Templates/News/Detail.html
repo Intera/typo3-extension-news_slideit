@@ -38,7 +38,7 @@
 					<f:if condition="{newsItem.author}">
 						<!-- author -->
 						<span class="news-list-author">
-							<f:translate key="author" arguments="{0:newsItem.author}"></f:translate>
+							<f:translate key="author" arguments="{0:newsItem.author}" />
 						</span>
 					</f:if>
 				</p>
@@ -48,7 +48,7 @@
 
 			<f:if condition="{newsItem.contentElements}">
 				<!-- content elements -->
-				<f:cObject typoscriptObjectPath="lib.tx_news.contentElementRendering">{newsItem.contentElementIdList}</f:cObject>
+				<f:cObject typoscriptObjectPath="lib.tx_news.contentElementRendering" data="{newsUid: newsItem.uidLocalized, newsPid: newsItem.pid}" />
 			</f:if>
 
 			<f:if condition="{settings.backPid}">

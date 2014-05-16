@@ -112,10 +112,22 @@ class SliderNews extends NewsRichteaser {
 
 		/** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
 		$fileRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
-		$teaserContentUids = $this->getTeaserContentElementIdList();
-		$teaserContentUids = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $teaserContentUids, TRUE);
+		$teaserContentElements = $this->getTeaserContentElements();
 
-		foreach ($teaserContentUids as $contentUid) {
+		if (!isset($teaserContentElements)) {
+			return $this->sliderImageFromContent;
+		}
+
+		/**
+		 * @var \Tx_News_Domain_Model_TtContent $contentElement
+		 */
+		foreach ($teaserContentElements as $contentElement) {
+
+			$contentUid = $contentElement->getUid();
+
+			if ($contentUid === 0) {
+				continue;
+			}
 
 			$imageFiles = $fileRepository->findByRelation('tt_content', 'image', $contentUid);
 

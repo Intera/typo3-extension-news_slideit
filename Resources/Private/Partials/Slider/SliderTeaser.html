@@ -4,8 +4,6 @@
 		{newsItem.sliderTeaser}
 	</f:then>
 	<f:else>
-		<f:cObject typoscriptObjectPath="lib.tx_news_slideit.contentElementRendering">
-			{newsItem.teaserContentElementIdList}
-		</f:cObject>
+		<f:cObject typoscriptObjectPath="lib.tx_news_slideit.contentElementRendering" data="{newsUid: newsItem.uidLocalized, newsPid: newsItem.pid}" />
 	</f:else>
 </f:if>
