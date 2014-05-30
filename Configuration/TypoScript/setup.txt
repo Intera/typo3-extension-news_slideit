@@ -74,7 +74,7 @@ lib.tx_news_slideit.contentElementRendering {
 
 	// get the news records from the default configuration
 	// but only render the text from the bodytext field
-	10 = < lib.tx_news.contentElementRendering
+	10 = < lib.tx_news.contentElementRenderingTeaser
 	10.renderObj = TEXT
 	10.renderObj.field = bodytext
 
