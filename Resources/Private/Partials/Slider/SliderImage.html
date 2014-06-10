@@ -5,7 +5,7 @@
 	<n:link newsItem="{newsItem}" settings="{settings}">
 		<f:if condition="{newsItem.sliderImage}">
 			<f:then>
-				<f:image src="{newsItem.sliderImage.publicUrl}" alt="{newsItem.sliderImage.alternative}" title="{newsItem.sliderImage.title}" width="{columnSettings.sliderImageWidth}" height="{columnSettings.sliderImageHeight}"/></f:then>
+				<f:image image="{newsItem.sliderImage}" width="{columnSettings.sliderImageWidth}" height="{columnSettings.sliderImageHeight}"/></f:then>
 			<f:else>
 				<f:image src="{columnSettings.sliderDefaultImage}" alt="Standardbild für News" />
 			</f:else>
