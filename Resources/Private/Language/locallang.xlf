@@ -24,6 +24,9 @@
 			<trans-unit id="no_news_available" xml:space="preserve">
 				<source>Currently no news are available.</source>
 			</trans-unit>
+			<trans-unit id="back_link">
+				<source>Previous page</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
