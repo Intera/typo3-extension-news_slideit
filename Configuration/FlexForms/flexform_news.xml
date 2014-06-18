@@ -406,7 +406,12 @@
 								<eval>num</eval>
 							</config>
 							<!-- Modification by intera - BEGIN -->
-							<displayCond><![CDATA[FIELD:switchableControllerActions:=:News->simpleList]]></displayCond>
+							<displayCond>
+								<OR>
+									<numIndex><![CDATA[FIELD:switchableControllerActions:=:News->simpleList]]></numIndex>
+									<numIndex><![CDATA[FIELD:switchableControllerActions:=:News->slider]]></numIndex>
+								</OR>
+							</displayCond>
 							<!-- Modification by intera - END -->
 						</TCEforms>
 					</settings.limit>
