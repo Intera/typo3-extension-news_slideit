@@ -1,6 +1,9 @@
 {namespace n=Tx_News_ViewHelpers}
+{namespace ns=Int\NewsSlideit\ViewHelpers}
 <f:if condition="{settings.list.rss.disable}" then="">
 	<f:else>
-		<n:headerData><link rel="alternate" type="application/rss+xml" title="{rssTitle}" href="{f:uri.page(pageUid: '{contentObjectData.pid}', pageType: '2457', additionalParams:'{content: \'{contentObjectData.uid}\'}')}" /></n:headerData>
+		<ns:disableRealUrl>
+			<n:headerData><link rel="alternate" type="application/rss+xml" title="{rssTitle}" href="{f:uri.page(pageUid: '{contentObjectData.pid}', pageType: '2457', additionalParams:'{content: \'{contentObjectData.uid}\'}')}" /></n:headerData>
+		</ns:disableRealUrl>
 	</f:else>
 </f:if>
