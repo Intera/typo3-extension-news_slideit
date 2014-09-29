@@ -58,8 +58,9 @@ class OverlayQueryResult extends QueryResult {
 		foreach ($this->queryResult as $news) {
 
 			if ($news->getType() === 'tx_news_slideit_type_other') {
+				$displayNews = $news->getDisplayNews();
 				if (isset($displayNews)) {
-					$displayNews = clone($news->getDisplayNews());
+					$displayNews = clone($displayNews);
 					$displayNews->setOriginalUid($news->getUid());
 					$overlayedResult[] = $displayNews;
 				} else {
