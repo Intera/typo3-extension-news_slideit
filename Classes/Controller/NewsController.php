@@ -52,6 +52,17 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	}
 
 	/**
+	 * We disable the PID check of the news for the detail view so that it is possible
+	 * to display news from other areas.
+	 *
+	 * @param \Tx_News_Domain_Model_News $news
+	 * @return \Tx_News_Domain_Model_News
+	 */
+	protected function checkPidOfNewsRecord(\Tx_News_Domain_Model_News $news) {
+		return $news;
+	}
+
+	/**
 	 * Overrides the news detail action so that we get a slider
 	 * news domain model instead of a normal one.
 	 *
