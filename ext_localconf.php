@@ -12,15 +12,3 @@ $extbaseObjectContainer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('
 $extbaseObjectContainer->registerImplementation('Tx_News_Controller_NewsController', 'Int\\NewsSlideit\\Controller\\NewsController');
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['ext_news_slideit_flexformrsstitle'] = 'Int\\NewsSlideit\\Install\\FlexFormRssTitleUpdate';
-
-// Register our tables in the cacheopt Extension.
-if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('cacheopt')) {
-	\Tx\Cacheopt\CacheOptimizerRegistry::getInstance()->registerPluginForTables(
-		array(
-			'tx_news_domain_model_news',
-			'tx_news_domain_model_tag',
-			'sys_category',
-		),
-		'news_pi1'
-	);
-}
