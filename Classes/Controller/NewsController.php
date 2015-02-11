@@ -227,4 +227,34 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	protected function isHtmlFormat() {
 		return !(isset($this->settings['format']) && $this->settings['format'] !== 'html');
 	}
+
+	/**
+	 * Sets the value for the given argument.
+	 *
+	 * @param \TYPO3\CMS\Extbase\Mvc\Controller\Argument $argument
+	 * @param string $argumentName
+	 * @throws \Exception
+	 * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+	 * @throws \TYPO3\CMS\Extbase\Property\Exception
+	 */
+	protected function setArgumentValue($argument, $argumentName) {
+
+		try {
+
+			$argument->setValue($this->request->getArgument($argumentName));
+
+		} catch (\TYPO3\CMS\Extbase\Property\Exception  $e) {
+
+			if ($argumentName !== 'news') {
+				throw $e;
+			}
+
+			if (
+				!$e->getPrevious() instanceof \TYPO3\CMS\Extbase\Property\Exception\TargetNotFoundException
+				&& !$e->getPrevious() instanceof \TYPO3\CMS\Extbase\Property\Exception\InvalidSourceException
+			) {
+				throw $e;
+			}
+		}
+	}
 }
