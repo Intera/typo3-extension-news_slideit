@@ -11,10 +11,13 @@ namespace Int\NewsSlideit\Domain\Repository;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use \GeorgRinger\News\Domain\Repository\NewsRepository;
+use Int\NewsSlideit\Persistence\OverlayQuery;
+
 /**
  * Respository for slider news
  */
-class SliderNewsRepository extends \Tx_News_Domain_Repository_NewsRepository {
+class SliderNewsRepository extends NewsRepository {
 
 	/**
 	 * Calls the parent createQuery() method and replaces the created
@@ -24,7 +27,8 @@ class SliderNewsRepository extends \Tx_News_Domain_Repository_NewsRepository {
 	 */
 	public function createQuery() {
 		$query = parent::createQuery();
-		$overlayQuery = $this->objectManager->get('Int\\NewsSlideit\\Persistence\\OverlayQuery', $this->objectType);
+		/** @noinspection PhpMethodParametersCountMismatchInspection */
+		$overlayQuery = $this->objectManager->get(OverlayQuery::class, $this->objectType);
 		$overlayQuery->setQuerySettings($query->getQuerySettings());
 		return $overlayQuery;
 	}

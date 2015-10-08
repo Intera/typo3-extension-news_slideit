@@ -119,7 +119,7 @@ class SliderNews extends NewsRichteaser {
 		}
 
 		/**
-		 * @var \Tx_News_Domain_Model_TtContent $contentElement
+		 * @var \GeorgRinger\News\Domain\Model\TtContent $contentElement
 		 */
 		foreach ($teaserContentElements as $contentElement) {
 

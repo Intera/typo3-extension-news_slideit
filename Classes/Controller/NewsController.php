@@ -16,7 +16,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Controller of news records
  */
-class NewsController extends \Tx_News_Controller_NewsController {
+class NewsController extends \GeorgRinger\News\Controller\NewsController {
 
 	const DEFAULT_LIMIT = 3;
 
@@ -34,9 +34,9 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	 * Initialize common view variables.
 	 * Currently only the RSS title is initialized.
 	 *
-	 * @param \Tx_Extbase_MVC_View_ViewInterface $view
+	 * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
 	 */
-	public function initializeView(\Tx_Extbase_MVC_View_ViewInterface $view) {
+	public function initializeView(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view) {
 		parent::initializeView($view);
 		$this->initializeRssTitle($view);
 	}
@@ -55,10 +55,10 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	 * We disable the PID check of the news for the detail view so that it is possible
 	 * to display news from other areas.
 	 *
-	 * @param \Tx_News_Domain_Model_News $news
-	 * @return \Tx_News_Domain_Model_News
+	 * @param \GeorgRinger\News\Domain\Model\News
+	 * @return \GeorgRinger\News\Domain\Model\News
 	 */
-	protected function checkPidOfNewsRecord(\Tx_News_Domain_Model_News $news) {
+	protected function checkPidOfNewsRecord(\GeorgRinger\News\Domain\Model\News $news) {
 		return $news;
 	}
 
@@ -182,7 +182,7 @@ class NewsController extends \Tx_News_Controller_NewsController {
 	 * setting and if this is empty for the current action we use the
 	 * default limit defined in the DEFAULT_LIMIT constant.
 	 *
-	 * @param \Tx_News_Domain_Model_Dto_NewsDemand $demand
+	 * @param \GeorgRinger\News\Domain\Model\Dto\NewsDemand $demand
 	 */
 	protected function initializeDefaultLimitForCurrentActionIfNotSet($demand) {
 

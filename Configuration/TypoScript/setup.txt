@@ -13,10 +13,10 @@ plugin.tx_news {
 		classes {
 			// We unset all existing news class definitions so that all
 			// news will be returned, no matter what type they have
-			Tx_News_Domain_Model_News >
-			Tx_News_Domain_Model_NewsDefault >
-			Tx_News_Domain_Model_NewsExternal >
-			Tx_News_Domain_Model_NewsInternal >
+			GeorgRinger\News\Domain\Model\News >
+			GeorgRinger\News\Domain\Model\NewsDefault >
+			GeorgRinger\News\Domain\Model\NewsExternal >
+			GeorgRinger\News\Domain\Model\NewsInternal >
 			Int\NewsRichteaser\Domain\Model\NewsRichteaser >
 
 			// We handle all news as slider news with the additional
