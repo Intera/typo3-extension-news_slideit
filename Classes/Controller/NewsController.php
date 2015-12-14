@@ -11,6 +11,7 @@ namespace Int\NewsSlideit\Controller;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use GeorgRinger\News\Utility\Cache;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -121,6 +122,8 @@ class NewsController extends \GeorgRinger\News\Controller\NewsController {
 			'news' => $sliderNewsRecords,
 			'demand' => $demand,
 		));
+
+		Cache::addPageCacheTagsByDemandObject($demand);
 	}
 
 	/**
@@ -149,6 +152,8 @@ class NewsController extends \GeorgRinger\News\Controller\NewsController {
 			'inSideColumn' => $inSideColumn,
 			'columnSettings' => $columnSettings
 		));
+
+		Cache::addPageCacheTagsByDemandObject($demand);
 	}
 
 	/**
