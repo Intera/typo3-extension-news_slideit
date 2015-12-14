@@ -61,7 +61,7 @@ plugin.tx_news {
 			channel {
 				title =
 				description =
-				copyright = Universität Flensburg
+				copyright =
 			}
 		}
 	}
