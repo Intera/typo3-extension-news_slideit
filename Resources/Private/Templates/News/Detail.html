@@ -59,7 +59,7 @@
 				<!-- Link Back -->
 				<div class="news-backlink-wrap">
 					<f:link.page pageUid="{settings.backPid}">
-						<f:translate key="back_link" extensionName="news_slideit"/>
+						<f:translate key="back_link" extensionName="NewsSlideit"/>
 					</f:link.page>
 				</div>
 			</f:if>
@@ -67,10 +67,10 @@
 		</f:then>
 		<f:else>
 			<div class="header">
-				<{settings.detail.headerTag}><f:translate key="tx_news_slideit_no_news_seleted_header" extensionName="news_slideit"/></{settings.detail.headerTag}>
+				<{settings.detail.headerTag}><f:translate key="tx_news_slideit_no_news_seleted_header" extensionName="NewsSlideit"/></{settings.detail.headerTag}>
 			</div>
-			<p><f:translate key="tx_news_slideit_no_news_seleted_description" extensionName="news_slideit"/></p>
-			<p><f:link.page pageUid="{settings.backPid}"><f:translate key="tx_news_slideit_no_news_seleted_back_link" extensionName="news_slideit"/></f:link.page></p>
+			<p><f:translate key="tx_news_slideit_no_news_seleted_description" extensionName="NewsSlideit"/></p>
+			<p><f:link.page pageUid="{settings.backPid}"><f:translate key="tx_news_slideit_no_news_seleted_back_link" extensionName="NewsSlideit"/></f:link.page></p>
 		</f:else>
 	</f:if>
 
