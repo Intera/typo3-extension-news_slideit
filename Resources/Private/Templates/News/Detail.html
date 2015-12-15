@@ -12,7 +12,7 @@
 		<f:then>
 
 			<div class="header">
-				<h1>{newsItem.title}</h1>
+				<{settings.detail.headerTag}>{newsItem.title}</{settings.detail.headerTag}>
 			</div>
 
 			<f:cObject typoscriptObjectPath="lib.snippets.readspeaker_button" />
@@ -65,7 +65,7 @@
 		</f:then>
 		<f:else>
 			<div class="header">
-				<h1><f:translate key="tx_news_slideit_no_news_seleted_header" extensionName="news_slideit"/></h1>
+				<{settings.detail.headerTag}><f:translate key="tx_news_slideit_no_news_seleted_header" extensionName="news_slideit"/></{settings.detail.headerTag}>
 			</div>
 			<p><f:translate key="tx_news_slideit_no_news_seleted_description" extensionName="news_slideit"/></p>
 			<p><f:link.page pageUid="{settings.backPid}"><f:translate key="tx_news_slideit_no_news_seleted_back_link" extensionName="news_slideit"/></f:link.page></p>

@@ -58,13 +58,20 @@ plugin.tx_news {
 			sliderDisplayActions = 0
 		}
 
-		list.rss {
-			disable = 0
-			channel {
-				title =
-				description =
-				copyright =
+		list {
+			headerTag = h3
+			rss {
+				disable = 0
+				channel {
+					title =
+					description =
+					copyright =
+				}
 			}
+		}
+
+		detail {
+			headerTag = h1
 		}
 	}
 }

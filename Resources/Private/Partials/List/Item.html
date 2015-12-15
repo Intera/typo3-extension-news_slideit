@@ -6,11 +6,11 @@
 	<n:excludeDisplayedNews newsItem="{newsItem}" />
 	<!-- header -->
 	<div class="header">
-		<h3>
+		<{settings.list.headerTag}>
 			<n:link newsItem="{newsItem}" settings="{settings}">
 				{newsItem.title}
 			</n:link>
-		</h3>
+		</{settings.list.headerTag}>
 	</div>
 
 	<p class="news-list-date">
