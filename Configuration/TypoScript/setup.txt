@@ -49,11 +49,13 @@ plugin.tx_news {
 		sliderImageWidth = 232c
 		sliderImageHeight = 166c
 		sliderDefaultImage = EXT:news_slideit/Resources/Public/Images/NewsSliderDefault.png
+		sliderDisplayActions = 0
 
 		sideColumn {
 			sliderImageWidth = 222c
 			sliderImageHeight = 159c
 			sliderDefaultImage = EXT:news_slideit/Resources/Public/Images/NewsSliderDefaultInSideColumn.png
+			sliderDisplayActions = 0
 		}
 
 		list.rss {

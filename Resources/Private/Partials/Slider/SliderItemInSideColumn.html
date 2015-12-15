@@ -37,11 +37,13 @@
 
 		</div>
 
-		<div class="news-slider-actions">
-			<div class="news-slider-counter">
-				{newsIteration.cycle} / {newsIteration.total}
+		<f:if condition="{settings.sliderDisplayActions}">
+			<div class="news-slider-actions">
+				<div class="news-slider-counter">
+					{newsIteration.cycle} / {newsIteration.total}
+				</div>
 			</div>
-		</div>
+		</f:if>
 
 	</div>
 
