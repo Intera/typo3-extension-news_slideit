@@ -15,7 +15,9 @@
 				<{settings.detail.headerTag}>{newsItem.title}</{settings.detail.headerTag}>
 			</div>
 
-			<f:cObject typoscriptObjectPath="lib.snippets.readspeaker_button" />
+			<f:if condition="{settings.detail.subheaderTyposcriptPath}">
+				<f:cObject typoscriptObjectPath="{settings.detail.subheaderTyposcriptPath}" />
+			</f:if>
 
 			<div class="footer">
 				<p>
