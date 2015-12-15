@@ -1,7 +1,7 @@
 <?php
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'News slider',
-	'description' => 'Renders news for the news slider',
+	'description' => 'Renders news for a slider and adjusts some templates.',
 	'category' => 'fe',
 	'state' => 'stable',
 	'uploadfolder' => 0,

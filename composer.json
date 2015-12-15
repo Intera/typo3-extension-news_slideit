@@ -1,0 +1,15 @@
+{
+	"name": "intera-typo3-extension/news-slideit",
+	"description": "Renders news for a slider and adjusts some templates.",
+	"type": "typo3-cms-extension",
+	"license": "GPL-3.0+",
+	"suggest": {
+		"georgringer/news": "*",
+		"de-swebhosting-typo3-extension/news-richteaser": "*"
+	},
+	"autoload": {
+		"psr-4": {
+			"Int\\NewsSlideit\\": "Classes/"
+		}
+	}
+}
