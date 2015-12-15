@@ -9,6 +9,9 @@
 			<trans-unit id="news_simple_list_action" xml:space="preserve">
 				<source>Simple list without images</source>
 			</trans-unit>
+			<trans-unit id="tx_news_slideit_more_link_label" xml:space="preserve">
+				<source>[...]</source>
+			</trans-unit>
 			<trans-unit id="tx_news_slideit_more_link_title" xml:space="preserve">
 				<source>Continue reading the current news article</source>
 			</trans-unit>
