@@ -4,8 +4,10 @@
 	"type": "typo3-cms-extension",
 	"license": "GPL-3.0+",
 	"suggest": {
-		"georgringer/news": "*",
-		"de-swebhosting-typo3-extension/news-richteaser": "*"
+		"georgringer/news": "",
+		"news": "",
+		"de-swebhosting-typo3-extension/news-richteaser": "",
+		"news_richteaser": ""
 	},
 	"autoload": {
 		"psr-4": {
