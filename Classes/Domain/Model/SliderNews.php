@@ -123,7 +123,14 @@ class SliderNews extends NewsRichteaser {
 		 */
 		foreach ($teaserContentElements as $contentElement) {
 
-			$contentUid = $contentElement->getUid();
+			// Since the localized UID is not accessible in the TtContent domain model
+			// of the news Extension we need to use Reflection to get its value.
+			$contentElementReflection = new \ReflectionObject($contentElement);
+			$localizedUidProperty = $contentElementReflection->getProperty('_localizedUid');
+			$localizedUidProperty->setAccessible(true);
+			$localizedUid = $localizedUidProperty->getValue($contentElement);
+
+			$contentUid = $localizedUid ?: $contentElement->getUid();
 
 			if ($contentUid === 0) {
 				continue;
