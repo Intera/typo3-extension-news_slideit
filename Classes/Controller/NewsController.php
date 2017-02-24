@@ -76,7 +76,7 @@ class NewsController extends \GeorgRinger\News\Controller\NewsController {
 	 * @ignorevalidation $news
 	 */
 	public function detailAction(\Int\NewsSlideit\Domain\Model\SliderNews $news = NULL, $currentPage = 1) {
-        parent::detailAction($news, $currentPage);
+		parent::detailAction($news, $currentPage);
 	}
 
 	/**
