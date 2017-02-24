@@ -74,6 +74,8 @@ plugin.tx_news {
 			headerTag = h1
 			subheaderTyposcriptPath =
 		}
+
+		hideNewsdate = 0
 	}
 }
 

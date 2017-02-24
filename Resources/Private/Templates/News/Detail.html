@@ -10,7 +10,6 @@
 <f:section name="content">
 	<f:if condition="{newsItem}">
 		<f:then>
-
 			<div class="header">
 				<{settings.detail.headerTag}>{newsItem.title}</{settings.detail.headerTag}>
 			</div>
@@ -22,9 +21,16 @@
 			<div class="footer">
 				<p>
 					<!-- date -->
-					<span class="news-list-date">
-						<time datetime="{f:format.date(date: newsItem.datetime, format: 'Y-m-d')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time>
-					</span>
+					<f:if condition="{settings.hideNewsdate}">
+						<f:then>
+
+						</f:then>
+						<f:else>
+							<span class="news-list-date">
+								<time datetime="{f:format.date(date: newsItem.datetime, format: 'Y-m-d')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time>
+							</span>
+						</f:else>
+					</f:if>
 
 					<f:if condition="{newsItem.categories}">
 						<f:render partial="Category/Items" arguments="{categories:newsItem.categories, settings:settings}" />

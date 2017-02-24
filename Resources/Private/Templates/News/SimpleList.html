@@ -19,7 +19,18 @@
 						</h3>
 					</header>
 
-					<p class="news-simple-list-datetime"><time datetime="{f:format.date(date:newsItem.datetime, format: 'c')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time></p>
+					<f:if condition="{settings.hideNewsdate}">
+						<f:then>
+
+						</f:then>
+						<f:else>
+							<p class="news-simple-list-datetime">
+								<time datetime="{f:format.date(date:newsItem.datetime, format: 'c')}">
+									<f:format.date format="%x">{newsItem.datetime}</f:format.date>
+								</time>
+							</p>
+						</f:else>
+					</f:if>
 
 					<p class="news-simple-list-item-teaser">
 						<f:cObject typoscriptObjectPath="lib.tx_news_slideit.contentElementRendering" data="{newsUid: newsItem.uidLocalized, newsPid: newsItem.pid}" />

@@ -13,9 +13,16 @@
 		</{settings.list.headerTag}>
 	</div>
 
-	<p class="news-list-date">
-		<time datetime="{f:format.date(date: newsItem.datetime, format: 'Y-m-d')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time>
-	</p>
+	<f:if condition="{settings.hideNewsdate}">
+		<f:then>
+
+		</f:then>
+		<f:else>
+			<p class="news-list-date">
+				<time datetime="{f:format.date(date: newsItem.datetime, format: 'Y-m-d')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time>
+			</p>
+		</f:else>
+	</f:if>
 
 	<!-- teas=ser text -->
 	<f:render partial="List/Teaser" arguments="{newsItem: newsItem, settings: settings}"/>
