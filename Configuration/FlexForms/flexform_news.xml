@@ -534,6 +534,16 @@
 						</TCEforms>
 					</settings.hidePagination>
 
+					<!-- Hide newsdate -->
+					<settings.hideNewsdate>
+						<TCEforms>
+							<label>LLL:EXT:news_slideit/Resources/Private/Language/locallang_csh_news.xlf:flexforms_additional.hideNewsdate</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</settings.hideNewsdate>
+
 					<!-- topNewsFirst -->
 					<settings.topNewsFirst>
 						<TCEforms>

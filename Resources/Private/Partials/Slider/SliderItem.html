@@ -19,7 +19,18 @@
 					</h3>
 				</header>
 
-				<p><time datetime="{f:format.date(date:newsItem.datetime, format: 'c')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time></p>
+				<f:if condition="{settings.hideNewsdate}">
+					<f:then>
+
+					</f:then>
+					<f:else>
+						<p>
+							<time datetime="{f:format.date(date:newsItem.datetime, format: 'c')}">
+								<f:format.date format="%x">{newsItem.datetime}</f:format.date>
+							</time>
+						</p>
+					</f:else>
+				</f:if>
 
 				<div class="news-slider-teaser">
 					<f:render partial="Slider/SliderTeaser" arguments="{_all}" />
