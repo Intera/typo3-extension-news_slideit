@@ -40,7 +40,9 @@
 		<f:if condition="{settings.sliderDisplayActions}">
 			<div class="news-slider-actions">
 				<div class="news-slider-counter">
-					{newsIteration.cycle} / {newsIteration.total}
+					{newsIteration.cycle}
+					<span class="news-slider-counter-seperator" style="display:none;">/</span>
+					<span class="news-slider-counter-total" style="display:none;"></span>
 				</div>
 			</div>
 		</f:if>
