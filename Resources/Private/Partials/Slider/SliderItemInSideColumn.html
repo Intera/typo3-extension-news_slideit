@@ -17,7 +17,9 @@
 					</h3>
 				</header>
 
-				<p><time datetime="{f:format.date(date:newsItem.datetime, format: 'c')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time></p>
+				<f:if condition="{settings.displayNewsDate}">
+					<p><time datetime="{f:format.date(date:newsItem.datetime, format: 'c')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time></p>
+				</f:if>
 
 				<f:render partial="Slider/SliderImage" arguments="{_all}"/>
 

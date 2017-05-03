@@ -22,9 +22,11 @@
 			<div class="footer">
 				<p>
 					<!-- date -->
-					<span class="news-list-date">
-						<time datetime="{f:format.date(date: newsItem.datetime, format: 'Y-m-d')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time>
-					</span>
+					<f:if condition="{settings.displayNewsDate}">
+						<span class="news-list-date">
+							<time datetime="{f:format.date(date: newsItem.datetime, format: 'Y-m-d')}"><f:format.date format="%x">{newsItem.datetime}</f:format.date></time>
+						</span>
+					</f:if>
 
 					<f:if condition="{newsItem.categories}">
 						<f:render partial="Category/Items" arguments="{categories:newsItem.categories, settings:settings}" />

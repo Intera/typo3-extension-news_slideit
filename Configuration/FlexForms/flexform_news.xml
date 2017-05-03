@@ -416,6 +416,14 @@
 						</TCEforms>
 					</settings.limit>
 
+					<settings.displayNewsDate>
+						<label>LLL:EXT:news_slideit/Resources/Private/Language/locallang_be.xml:flexforms_additional.displayNewsDate</label>
+						<config>
+							<type>check</type>
+							<default>1</default>
+						</config>
+					</settings.displayNewsDate>
+
 				</el>
 			</ROOT>
 		</sDEF>

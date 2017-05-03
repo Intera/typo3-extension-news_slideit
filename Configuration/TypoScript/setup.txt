@@ -58,6 +58,8 @@ plugin.tx_news {
 			sliderDisplayActions = 0
 		}
 
+		displayNewsDate = 1
+
 		list {
 			headerTag = h3
 			rss {
