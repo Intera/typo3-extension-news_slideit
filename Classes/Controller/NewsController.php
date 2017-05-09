@@ -12,6 +12,7 @@ namespace Int\NewsSlideit\Controller;
  *                                                                        */
 
 use GeorgRinger\News\Utility\Cache;
+use Int\NewsSlideit\Domain\Repository\SliderNewsRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -43,12 +44,18 @@ class NewsController extends \GeorgRinger\News\Controller\NewsController {
 	}
 
 	/**
-	 * We override the default injector so that the news controller
-	 * always uses the slider news repository.
+	 * We do not set the newsRepository property here to make sure the injector for the
+	 * slider news repository is working.
 	 *
+	 * @param \GeorgRinger\News\Domain\Repository\NewsRepository $newsRepository
+	 */
+	public function injectNewsRepository(\GeorgRinger\News\Domain\Repository\NewsRepository $newsRepository) {
+	}
+
+	/**
 	 * @param \Int\NewsSlideit\Domain\Repository\SliderNewsRepository $newsRepository
 	 */
-	public function injectNewsRepository(\Int\NewsSlideit\Domain\Repository\SliderNewsRepository $newsRepository) {
+	public function injectNewsRepositorySlider(SliderNewsRepository $newsRepository) {
 		$this->newsRepository = $newsRepository;
 	}
 
@@ -71,11 +78,12 @@ class NewsController extends \GeorgRinger\News\Controller\NewsController {
 	 * other news classes and otherwise we would get a default news
 	 * model which does not have the enhanced teaser handling.
 	 *
-	 * @param \Int\NewsSlideit\Domain\Model\SliderNews $news
+	 * @param \GeorgRinger\News\Domain\Model\News $news
 	 * @param integer $currentPage
 	 * @ignorevalidation $news
 	 */
-	public function detailAction(\Int\NewsSlideit\Domain\Model\SliderNews $news = NULL, $currentPage = 1) {
+	public function detailAction(\GeorgRinger\News\Domain\Model\News $news = NULL, $currentPage = 1) {
+		$news = $this->newsRepository->findByUid($news->getUid());
 		parent::detailAction($news, $currentPage);
 	}
 
