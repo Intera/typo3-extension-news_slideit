@@ -83,7 +83,9 @@ class NewsController extends \GeorgRinger\News\Controller\NewsController {
 	 * @ignorevalidation $news
 	 */
 	public function detailAction(\GeorgRinger\News\Domain\Model\News $news = NULL, $currentPage = 1) {
-		$news = $this->newsRepository->findByUid($news->getUid());
+		if ($news !== null) {
+			$news = $this->newsRepository->findByUid($news->getUid());
+		}
 		parent::detailAction($news, $currentPage);
 	}
 
