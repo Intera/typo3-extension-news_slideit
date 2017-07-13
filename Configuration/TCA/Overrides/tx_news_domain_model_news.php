@@ -34,7 +34,8 @@ $sliderColumns = array(
 								--palette--;;filePalette'
 					),
 				),
-			), $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'])
+			), $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']),
+        'l10n_mode' => 'exclude',
 	),
 
 	'tx_news_slideit_display_news' => array(
