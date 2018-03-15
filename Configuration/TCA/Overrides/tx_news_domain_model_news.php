@@ -25,12 +25,12 @@ $sliderColumns = array(
 				'foreign_types' => array(
 					'0' => array(
 						'showitem' => '
-								--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;txMicroportalsImageOverlayPalette,
+								--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;txNewsSlideitImageOverlayPalette,
 								--palette--;;filePalette'
 					),
 					\TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => array(
 						'showitem' => '
-								--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;txMicroportalsImageOverlayPalette,
+								--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;txNewsSlideitImageOverlayPalette,
 								--palette--;;filePalette'
 					),
 				),
