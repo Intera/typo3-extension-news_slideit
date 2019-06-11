@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Int\NewsSlideit\Install;
 
 /*                                                                        *
@@ -11,103 +13,172 @@ namespace Int\NewsSlideit\Install;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use Doctrine\DBAL\FetchMode;
+use PDO;
+use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Install\Updates\AbstractUpdate;
+use TYPO3\CMS\Install\Updates\ChattyInterface;
+use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
 /**
  * Class FileIdentifierHashUpdate adds IdentifierHashes
  */
-class FlexFormRssTitleUpdate extends AbstractUpdate {
+class FlexFormRssTitleUpdate implements UpgradeWizardInterface, ChattyInterface
+{
+    /**
+     * @var FlexFormTools
+     */
+    protected $flexObj;
 
-	/**
-	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
-	 */
-	protected $db;
+    /**
+     * @var OutputInterface
+     */
+    private $output;
 
-	/**
-	 * @var string
-	 */
-	protected $flexFormWhere = "pi_flexform LIKE '%<field index=\"settings.list.rss.channel\">%'";
+    /**
+     * Execute the update
+     *
+     * Called when a wizard reports that an update is necessary
+     *
+     * @return bool
+     */
+    public function executeUpdate(): bool
+    {
+        $this->flexObj = GeneralUtility::makeInstance(FlexFormTools::class);
 
-	/**
-	 * @var \TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools
-	 */
-	protected $flexObj;
+        $builder = $this->getQueryBuilderForTable('tt_content');
+        $builder->from('tt_content');
+        $this->applyOutdatedFlexFormConstraint($builder);
+        $result = $builder->execute();
 
-	/**
-	 * @var array
-	 */
-	protected $sqlQueries = array();
+        $outdatedContentElements = $result->fetchAll(FetchMode::ASSOCIATIVE);
+        foreach ($outdatedContentElements as $outdatedContent) {
+            $this->updateOutdatedContentFlexForm($outdatedContent);
+        }
 
-	/**
-	 * @var string
-	 */
-	protected $title = 'Updates the news_slideit RSS channel title setting in the FlexForm.';
+        return true;
+    }
 
-	/**
-	 * Creates this object
-	 */
-	public function __construct() {
-		$this->db = $GLOBALS['TYPO3_DB'];
-	}
+    /**
+     * Return the description for this wizard
+     *
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return 'Rename the settings.list.rss.channel setting to settings.list.rss.channel.title';
+    }
 
-	/**
-	 * Checks if an update is needed.
-	 *
-	 * @param string &$description The description for the update
-	 * @return boolean TRUE if an update is needed, FALSE otherwise
-	 */
-	public function checkForUpdate(&$description) {
-		$description = 'Rename the settings.list.rss.channel setting to settings.list.rss.channel.title';
-		$newsPluginWithOldRssSettingCount = $this->db->exec_SELECTcountRows(
-			'uid',
-			'tt_content',
-			$this->flexFormWhere
-		);
+    /**
+     * Return the identifier for this wizard
+     * This should be the same string as used in the ext_localconf class registration
+     *
+     * @return string
+     */
+    public function getIdentifier(): string
+    {
+        return 'tx_news_slideit_flex_form_rss_title';
+    }
 
-		return $newsPluginWithOldRssSettingCount > 0;
-	}
+    /**
+     * Returns an array of class names of Prerequisite classes
+     *
+     * This way a wizard can define dependencies like "database up-to-date" or
+     * "reference index updated"
+     *
+     * @return string[]
+     */
+    public function getPrerequisites(): array
+    {
+        return [];
+    }
 
-	/**
-	 * Performs the database update.
-	 *
-	 * @param array &$dbQueries Queries done in this update
-	 * @param mixed &$customMessages Custom messages
-	 * @return boolean TRUE on success, FALSE on error
-	 */
-	public function performUpdate(array &$dbQueries, &$customMessages) {
-		$this->flexObj = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Configuration\\FlexForm\\FlexFormTools');
+    /**
+     * Return the speaking name of this wizard
+     *
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return 'Update news_slideit RSS channel title setting in the FlexForm';
+    }
 
-		$outdatedContentElements = $this->db->exec_SELECTgetRows(
-			'*',
-			'tt_content',
-			$this->flexFormWhere
-		);
-		foreach ($outdatedContentElements as $outdatedContent) {
-			$this->updateOutdatedContentFlexForm($outdatedContent, $dbQueries);
-		}
-		return TRUE;
-	}
+    /**
+     * Setter injection for output into upgrade wizards
+     *
+     * @param OutputInterface $output
+     */
+    public function setOutput(OutputInterface $output): void
+    {
+        $this->output = $output;
+    }
 
-	/**
-	 * Updates the FlexForm data in the given outdated content element.
-	 *
-	 * @param array $outdatedContent
-	 * @param array &$dbQueries Queries done in this update
-	 */
-	protected function updateOutdatedContentFlexForm($outdatedContent, array &$dbQueries) {
+    /**
+     * Is an update necessary?
+     *
+     * Is used to determine whether a wizard needs to be run.
+     * Check if data for migration exists.
+     *
+     * @return bool
+     */
+    public function updateNecessary(): bool
+    {
+        $builder = $this->getQueryBuilderForTable('tt_content');
+        $builder->from('tt_content');
+        $this->applyOutdatedFlexFormConstraint($builder);
+        $builder->count('uid');
+        $newsPluginWithOldRssSettingCount = $builder->execute()->fetchColumn(0);
+        return $newsPluginWithOldRssSettingCount > 0;
+    }
 
-		$flexFormArray = GeneralUtility::xml2array($outdatedContent['pi_flexform']);
+    /**
+     * @param QueryBuilder $builder
+     */
+    private function applyOutdatedFlexFormConstraint(QueryBuilder $builder): void
+    {
+        $builder->where(
+            $builder->expr()->like('pi_flexform', '%<field index="settings.list.rss.channel">%')
+        );
+    }
 
-		if (isset($flexFormArray['data']['rss']['lDEF']['settings.list.rss.channel'])) {
-			$title = $flexFormArray['data']['rss']['lDEF']['settings.list.rss.channel'];
-			unset($flexFormArray['data']['rss']['lDEF']['settings.list.rss.channel']);
-			$flexFormArray['data']['rss']['lDEF']['settings.list.rss.channel.title'] = $title;
-		}
+    private function getConnectionPool(): ConnectionPool
+    {
+        return GeneralUtility::makeInstance(ConnectionPool::class);
+    }
 
-		$flexFormData = $this->flexObj->flexArray2Xml($flexFormArray);
-		$query = $this->db->UPDATEquery('tt_content', 'uid=' . (int)$outdatedContent['uid'], array('pi_flexform' => $flexFormData));
-		$this->db->sql_query($query);
-		$dbQueries[] = $query;
-	}
+    private function getQueryBuilderForTable(string $table): QueryBuilder
+    {
+        return $this->getConnectionPool()->getQueryBuilderForTable($table);
+    }
+
+    /**
+     * Updates the FlexForm data in the given outdated content element.
+     *
+     * @param array $outdatedContent
+     */
+    private function updateOutdatedContentFlexForm(array $outdatedContent)
+    {
+        $flexFormArray = GeneralUtility::xml2array($outdatedContent['pi_flexform']);
+
+        if (isset($flexFormArray['data']['rss']['lDEF']['settings.list.rss.channel'])) {
+            $title = $flexFormArray['data']['rss']['lDEF']['settings.list.rss.channel'];
+            unset($flexFormArray['data']['rss']['lDEF']['settings.list.rss.channel']);
+            $flexFormArray['data']['rss']['lDEF']['settings.list.rss.channel.title'] = $title;
+        }
+
+        $flexFormData = $this->flexObj->flexArray2Xml($flexFormArray);
+        $builder = $this->getQueryBuilderForTable('tt_content');
+        $builder->update('tt_content');
+        $builder->set('pi_flexform', $flexFormData);
+        $builder->where(
+            $builder->expr()->eq(
+                'uid',
+                $builder->createNamedParameter((int)$outdatedContent['uid'], PDO::PARAM_INT)
+            )
+        );
+        $builder->execute();
+    }
 }

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Int\NewsSlideit\ViewHelpers;
 
 /*                                                                        *
@@ -11,20 +13,26 @@ namespace Int\NewsSlideit\ViewHelpers;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * This view helper parses the given path through GeneralUtility::locationHeaderUrl().
  */
-class LocationHeaderUrlViewHelper extends AbstractViewHelper {
+class LocationHeaderUrlViewHelper extends AbstractViewHelper
+{
+    public function initializeArguments()
+    {
+        $this->registerArgument('path', 'string', 'The URL path', true);
+    }
 
-	/**
-	 * Parses the given path through GeneralUtility::locationHeaderUrl().
-	 *
-	 * @param string $path
-	 * @return string
-	 */
-	public function render($path) {
-		return \TYPO3\CMS\Core\Utility\GeneralUtility::locationHeaderUrl($path);
-	}
+    /**
+     * Parses the given path through GeneralUtility::locationHeaderUrl().
+     *
+     * @return string
+     */
+    public function render()
+    {
+        return GeneralUtility::locationHeaderUrl($this->arguments['path']);
+    }
 }

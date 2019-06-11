@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Int\NewsSlideit\Controller;
 
 /*                                                                        *
@@ -11,265 +13,308 @@ namespace Int\NewsSlideit\Controller;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use GeorgRinger\News\Domain\Model\Dto\NewsDemand;
+use GeorgRinger\News\Domain\Model\News;
+use GeorgRinger\News\Domain\Repository\NewsRepository;
 use GeorgRinger\News\Utility\Cache;
 use Int\NewsSlideit\Domain\Repository\SliderNewsRepository;
+use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
+use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Extbase\Property\Exception;
+use TYPO3\CMS\Extbase\Property\Exception\InvalidSourceException;
+use TYPO3\CMS\Extbase\Property\Exception\TargetNotFoundException;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Controller of news records
  */
-class NewsController extends \GeorgRinger\News\Controller\NewsController {
+class NewsController extends \GeorgRinger\News\Controller\NewsController
+{
+    const DEFAULT_LIMIT = 3;
 
-	const DEFAULT_LIMIT = 3;
+    /**
+     * If no backPid was configured we set the backPid to the current
+     * page so that the back link will always be displayed.
+     */
+    public function initializeDetailAction()
+    {
+        if (!intval($this->settings['backPid'])) {
+            $this->settings['backPid'] = $GLOBALS['TSFE']->id;
+        }
+    }
 
-	/**
-	 * If no backPid was configured we set the backPid to the current
-	 * page so that the back link will always be displayed.
-	 */
-	public function initializeDetailAction() {
-		if (!intval($this->settings['backPid'])) {
-			$this->settings['backPid'] = $GLOBALS['TSFE']->id;
-		}
-	}
+    /**
+     * Initialize common view variables.
+     * Currently only the RSS title is initialized.
+     *
+     * @param ViewInterface $view
+     */
+    public function initializeView(ViewInterface $view)
+    {
+        parent::initializeView($view);
+        $this->initializeRssTitle($view);
+    }
 
-	/**
-	 * Initialize common view variables.
-	 * Currently only the RSS title is initialized.
-	 *
-	 * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
-	 */
-	public function initializeView(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view) {
-		parent::initializeView($view);
-		$this->initializeRssTitle($view);
-	}
+    /**
+     * We do not set the newsRepository property here to make sure the injector for the
+     * slider news repository is working.
+     *
+     * @param NewsRepository $newsRepository
+     */
+    public function injectNewsRepository(NewsRepository $newsRepository)
+    {
+        // Intentionally left blank!
+    }
 
-	/**
-	 * We do not set the newsRepository property here to make sure the injector for the
-	 * slider news repository is working.
-	 *
-	 * @param \GeorgRinger\News\Domain\Repository\NewsRepository $newsRepository
-	 */
-	public function injectNewsRepository(\GeorgRinger\News\Domain\Repository\NewsRepository $newsRepository) {
-	}
+    /**
+     * @param SliderNewsRepository $newsRepository
+     */
+    public function injectNewsRepositorySlider(SliderNewsRepository $newsRepository)
+    {
+        $this->newsRepository = $newsRepository;
+    }
 
-	/**
-	 * @param \Int\NewsSlideit\Domain\Repository\SliderNewsRepository $newsRepository
-	 */
-	public function injectNewsRepositorySlider(SliderNewsRepository $newsRepository) {
-		$this->newsRepository = $newsRepository;
-	}
+    /**
+     * Overrides the news detail action so that we get a slider
+     * news domain model instead of a normal one.
+     *
+     * This is required because we remove the configuration for all
+     * other news classes and otherwise we would get a default news
+     * model which does not have the enhanced teaser handling.
+     *
+     * @param News $news
+     * @param integer $currentPage
+     * @ignorevalidation $news
+     */
+    public function detailAction(News $news = null, $currentPage = 1)
+    {
+        if ($news !== null) {
+            $news = $this->newsRepository->findByUid($news->getUid());
+        }
+        parent::detailAction($news, $currentPage);
+    }
 
-	/**
-	 * We disable the PID check of the news for the detail view so that it is possible
-	 * to display news from other areas.
-	 *
-	 * @param \GeorgRinger\News\Domain\Model\News
-	 * @return \GeorgRinger\News\Domain\Model\News
-	 */
-	protected function checkPidOfNewsRecord(\GeorgRinger\News\Domain\Model\News $news) {
-		return $news;
-	}
+    /**
+     * Output a list view of news
+     *
+     * @param array $overwriteDemand
+     * @return void
+     */
+    public function listAction(array $overwriteDemand = null)
+    {
+        // Override demand settings and initialize required view variables for RSS feeds.
+        if (!$this->isHtmlFormat()) {
 
-	/**
-	 * Overrides the news detail action so that we get a slider
-	 * news domain model instead of a normal one.
-	 *
-	 * This is required because we remove the configuration for all
-	 * other news classes and otherwise we would get a default news
-	 * model which does not have the enhanced teaser handling.
-	 *
-	 * @param \GeorgRinger\News\Domain\Model\News $news
-	 * @param integer $currentPage
-	 * @ignorevalidation $news
-	 */
-	public function detailAction(\GeorgRinger\News\Domain\Model\News $news = NULL, $currentPage = 1) {
-		if ($news !== null) {
-			$news = $this->newsRepository->findByUid($news->getUid());
-		}
-		parent::detailAction($news, $currentPage);
-	}
+            $this->view->assign('language', $this->getPageRenderer()->getLanguage());
+            $this->view->assign('currentUrl', GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL'));
 
-	/**
-	 * Output a list view of news
-	 *
-	 * @param array $overwriteDemand
-	 * @return void
-	 */
-	public function listAction(array $overwriteDemand = NULL) {
+            $this->settings['disableOverrideDemand'] = 0;
+            $overwriteDemand = [
+                'limit' => $this->settings['defaultLimit']['rss'],
+                'offset' => 0,
+                'order' => 'datetime desc',
+            ];
+        }
 
-		// Override demand settings and initialize required view variables for RSS feeds.
-		if (!$this->isHtmlFormat()) {
+        parent::listAction($overwriteDemand);
+    }
 
-			$this->view->assign('language', $this->getTypoScriptFrontendController()->lang);
-			$this->view->assign('currentUrl', GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL'));
+    /**
+     * Renders a simple news list
+     */
+    public function simpleListAction()
+    {
+        if (!$this->isHtmlFormat()) {
+            $this->forward('list');
+        }
 
-			$this->settings['disableOverrideDemand'] = 0;
-			$overwriteDemand = array(
-				'limit' => $this->settings['defaultLimit']['rss'],
-				'offset' => 0,
-				'order' => 'datetime desc'
-			);
-		}
+        $demand = $this->createDemandObjectFromSettings($this->settings);
+        $this->initializeDefaultLimitForCurrentActionIfNotSet($demand);
 
-		parent::listAction($overwriteDemand);
-	}
+        $sliderNewsRecords = $this->newsRepository->findDemanded($demand);
 
-	/**
-	 * Renders a simple news list
-	 */
-	public function simpleListAction() {
+        $this->view->assignMultiple(
+            [
+                'news' => $sliderNewsRecords,
+                'demand' => $demand,
+            ]
+        );
 
-		if (!$this->isHtmlFormat()) {
-			$this->forward('list');
-		}
+        Cache::addPageCacheTagsByDemandObject($demand);
+    }
 
-		$demand = $this->createDemandObjectFromSettings($this->settings);
-		$this->initializeDefaultLimitForCurrentActionIfNotSet($demand);
+    /**
+     * Renders the slider
+     */
+    public function sliderAction()
+    {
+        if (!$this->isHtmlFormat()) {
+            $this->forward('list');
+        }
 
-		$sliderNewsRecords = $this->newsRepository->findDemanded($demand);
+        $demand = $this->createDemandObjectFromSettings($this->settings);
+        $this->initializeDefaultLimitForCurrentActionIfNotSet($demand);
 
-		$this->view->assignMultiple(array(
-			'news' => $sliderNewsRecords,
-			'demand' => $demand,
-		));
+        $sliderNewsRecords = $this->newsRepository->findDemanded($demand);
+        $inSideColumn = $this->inSideColumn();
 
-		Cache::addPageCacheTagsByDemandObject($demand);
-	}
+        $columnSettings = $this->settings;
+        if ($inSideColumn) {
+            ArrayUtility::mergeRecursiveWithOverrule(
+                $columnSettings,
+                $this->settings['sideColumn']
+            );
+        }
 
-	/**
-	 * Renders the slider
-	 */
-	public function sliderAction() {
+        $this->view->assignMultiple(
+            [
+                'news' => $sliderNewsRecords,
+                'demand' => $demand,
+                'inSideColumn' => $inSideColumn,
+                'columnSettings' => $columnSettings,
+            ]
+        );
 
-		if (!$this->isHtmlFormat()) {
-			$this->forward('list');
-		}
+        Cache::addPageCacheTagsByDemandObject($demand);
+    }
 
-		$demand = $this->createDemandObjectFromSettings($this->settings);
-		$this->initializeDefaultLimitForCurrentActionIfNotSet($demand);
+    /**
+     * We disable the PID check of the news for the detail view so that it is possible
+     * to display news from other areas.
+     *
+     * @param News $news
+     * @return News
+     */
+    protected function checkPidOfNewsRecord(News $news)
+    {
+        return $news;
+    }
 
-		$sliderNewsRecords = $this->newsRepository->findDemanded($demand);
-		$inSideColumn = $this->inSideColumn();
+    /**
+     * @return TypoScriptFrontendController
+     */
+    protected function getTypoScriptFrontendController()
+    {
+        return $GLOBALS['TSFE'];
+    }
 
-		$columnSettings = $this->settings;
-		if ($inSideColumn) {
-			\TYPO3\CMS\Core\Utility\ArrayUtility::mergeRecursiveWithOverrule($columnSettings, $this->settings['sideColumn']);
-		}
+    /**
+     * Checks if the current content element was placed in a side column
+     *
+     * @return bool TRUE if content element is in side column
+     */
+    protected function inSideColumn()
+    {
+        $contentObject = $this->configurationManager->getContentObject();
 
-		$this->view->assignMultiple(array(
-			'news' => $sliderNewsRecords,
-			'demand' => $demand,
-			'inSideColumn' => $inSideColumn,
-			'columnSettings' => $columnSettings
-		));
+        $typoScriptService = $this->objectManager->get(TypoScriptService::class);
+        $settingsAsTypoScriptArray = $typoScriptService->convertPlainArrayToTypoScriptArray($this->settings);
+        $mainContentColumns = $contentObject->stdWrap(
+            $settingsAsTypoScriptArray['mainContentColumns'],
+            $settingsAsTypoScriptArray['mainContentColumns.']
+        );
 
-		Cache::addPageCacheTagsByDemandObject($demand);
-	}
+        $inSideColumn = !in_array(
+            $contentObject->data['colPos'],
+            GeneralUtility::trimExplode(',', $mainContentColumns, true)
+        );
 
-	/**
-	 * @return \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
-	 */
-	protected function getTypoScriptFrontendController() {
-		return $GLOBALS['TSFE'];
-	}
+        return $inSideColumn;
+    }
 
-	/**
-	 * Checks if the current content element was placed in a side column
-	 *
-	 * @return bool TRUE if content element is in side column
-	 */
-	protected function inSideColumn() {
+    /**
+     * If no limit is set in the settings we fallback to the defaultLimit
+     * setting and if this is empty for the current action we use the
+     * default limit defined in the DEFAULT_LIMIT constant.
+     *
+     * @param NewsDemand $demand
+     */
+    protected function initializeDefaultLimitForCurrentActionIfNotSet($demand)
+    {
+        if ($this->settings['limit'] !== '') {
+            return;
+        }
 
-		$contentObject = $this->configurationManager->getContentObject();
+        $controllerActionName = $this->request->getControllerActionName();
+        if (isset($this->settings['defaultLimit'][$controllerActionName])) {
+            $demand->setLimit($this->settings['defaultLimit'][$controllerActionName]);
+        } else {
+            $demand->setLimit(static::DEFAULT_LIMIT);
+        }
+    }
 
-		/** @var \TYPO3\CMS\Extbase\Service\TypoScriptService $typoScriptService */
-		$typoScriptService = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService');
-		$settingsAsTypoScriptArray = $typoScriptService->convertPlainArrayToTypoScriptArray($this->settings);
-		$mainContentColumns = $contentObject->stdWrap($settingsAsTypoScriptArray['mainContentColumns'], $settingsAsTypoScriptArray['mainContentColumns.']);
+    /**
+     * Initializes the title for the RSS feed of the current action consisting
+     * of the page title and the content element header.
+     *
+     * @param ViewInterface $view
+     */
+    protected function initializeRssTitle(ViewInterface $view)
+    {
+        if (!empty($this->settings['list']['rss']['channel']['title'])) {
+            $view->assign('rssTitle', $this->settings['list']['rss']['channel']['title']);
+            return;
+        }
 
-		$inSideColumn = !in_array($contentObject->data['colPos'], GeneralUtility::trimExplode(',', $mainContentColumns, TRUE));
+        $rssTitle = $this->configurationManager->getContentObject()->data['header'];
 
-		return $inSideColumn;
-	}
+        $tsfe = $this->getTypoScriptFrontendController();
+        $tsfe->generatePageTitle();
+        $rssTitle .= ' - ' . $this->getPageRenderer()->getTitle();
 
-	/**
-	 * If no limit is set in the settings we fallback to the defaultLimit
-	 * setting and if this is empty for the current action we use the
-	 * default limit defined in the DEFAULT_LIMIT constant.
-	 *
-	 * @param \GeorgRinger\News\Domain\Model\Dto\NewsDemand $demand
-	 */
-	protected function initializeDefaultLimitForCurrentActionIfNotSet($demand) {
+        $view->assign('rssTitle', $rssTitle);
+    }
 
-		if ($this->settings['limit'] !== '') {
-			return;
-		}
+    /**
+     * Returns TRUE if the current request format is "html" or not set.
+     *
+     * @return bool
+     */
+    protected function isHtmlFormat()
+    {
+        return !(isset($this->settings['format']) && $this->settings['format'] !== 'html');
+    }
 
-		$controllerActionName = $this->request->getControllerActionName();
-		if (isset($this->settings['defaultLimit'][$controllerActionName])) {
-			$demand->setLimit($this->settings['defaultLimit'][$controllerActionName]);
-		} else {
-			$demand->setLimit(static::DEFAULT_LIMIT);
-		}
-	}
+    /**
+     * Sets the value for the given argument.
+     *
+     * @param Argument $argument
+     * @param string $argumentName
+     * @throws \Exception
+     * @throws NoSuchArgumentException
+     * @throws Exception
+     */
+    protected function setArgumentValue($argument, $argumentName)
+    {
+        try {
 
-	/**
-	 * Initializes the title for the RSS feed of the current action consisting
-	 * of the page title and the content element header.
-	 *
-	 * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
-	 */
-	protected function initializeRssTitle(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view) {
+            $argument->setValue($this->request->getArgument($argumentName));
+        } catch (Exception  $e) {
 
-		if (!empty($this->settings['list']['rss']['channel']['title'])) {
-			$view->assign('rssTitle', $this->settings['list']['rss']['channel']['title']);
-			return;
-		}
+            if ($argumentName !== 'news') {
+                throw $e;
+            }
 
-		$rssTitle = $this->configurationManager->getContentObject()->data['header'];
+            if (
+                !$e->getPrevious() instanceof TargetNotFoundException
+                && !$e->getPrevious() instanceof InvalidSourceException
+            ) {
+                throw $e;
+            }
+        }
+    }
 
-		\TYPO3\CMS\Frontend\Page\PageGenerator::generatePageTitle();
-		$rssTitle .= ' - ' . $this->getTypoScriptFrontendController()->getPageRenderer()->getTitle();
-
-		$view->assign('rssTitle', $rssTitle);
-	}
-
-	/**
-	 * Returns TRUE if the current request format is "html" or not set.
-	 *
-	 * @return bool
-	 */
-	protected function isHtmlFormat() {
-		return !(isset($this->settings['format']) && $this->settings['format'] !== 'html');
-	}
-
-	/**
-	 * Sets the value for the given argument.
-	 *
-	 * @param \TYPO3\CMS\Extbase\Mvc\Controller\Argument $argument
-	 * @param string $argumentName
-	 * @throws \Exception
-	 * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
-	 * @throws \TYPO3\CMS\Extbase\Property\Exception
-	 */
-	protected function setArgumentValue($argument, $argumentName) {
-
-		try {
-
-			$argument->setValue($this->request->getArgument($argumentName));
-
-		} catch (\TYPO3\CMS\Extbase\Property\Exception  $e) {
-
-			if ($argumentName !== 'news') {
-				throw $e;
-			}
-
-			if (
-				!$e->getPrevious() instanceof \TYPO3\CMS\Extbase\Property\Exception\TargetNotFoundException
-				&& !$e->getPrevious() instanceof \TYPO3\CMS\Extbase\Property\Exception\InvalidSourceException
-			) {
-				throw $e;
-			}
-		}
-	}
+    /**
+     * @return object|PageRenderer
+     */
+    private function getPageRenderer()
+    {
+        $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
+        return $pageRenderer;
+    }
 }

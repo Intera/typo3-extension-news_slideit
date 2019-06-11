@@ -1,4 +1,5 @@
 <?php
+
 namespace Int\NewsSlideit\Persistence;
 
 /*                                                                        *
@@ -11,6 +12,8 @@ namespace Int\NewsSlideit\Persistence;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use Int\NewsSlideit\Domain\Model\SliderNews;
+use Int\NewsSlideit\Domain\Repository\SliderNewsRepository;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 
 /**
@@ -18,71 +21,76 @@ use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
  * method is called all NewsOther records will be replaced with their
  * referenced news record.
  */
-class OverlayQueryResult extends QueryResult {
+class OverlayQueryResult extends QueryResult
+{
+    /**
+     * @var SliderNewsRepository
+     */
+    protected $sliderNewsRepository;
 
-	/**
-	 * @inject
-	 * @var \Int\NewsSlideit\Domain\Repository\SliderNewsRepository
-	 */
-	protected $sliderNewsRepository;
+    public function injectSliderNewsRepository(SliderNewsRepository $sliderNewsRepository)
+    {
+        $this->sliderNewsRepository = $sliderNewsRepository;
+    }
 
-	/**
-	 * Disables the given news and appends a error message to the news
-	 * title.
-	 *
-	 * @param \Int\NewsSlideit\Domain\Model\SliderNews $news
-	 * @return void
-	 */
-	protected function disableInvalidNews($news) {
-		$title = $news->getTitle();
-		$appendToTitle = '[Automatisch verborgen, referenzierte News nicht verfügbar]';
-		if (strpos($title, $appendToTitle) === FALSE) {
-			$title .= ' ' . $appendToTitle;
-			$news->setTitle($title);
-		}
-		$news->setHidden(1);
-		$this->sliderNewsRepository->updateAndPersist($news);
-	}
+    /**
+     * Disables the given news and appends a error message to the news
+     * title.
+     *
+     * @param SliderNews $news
+     * @return void
+     */
+    protected function disableInvalidNews($news)
+    {
+        $title = $news->getTitle();
+        $appendToTitle = '[Automatisch verborgen, referenzierte News nicht verfügbar]';
+        if (strpos($title, $appendToTitle) === false) {
+            $title .= ' ' . $appendToTitle;
+            $news->setTitle($title);
+        }
+        $news->setHidden(1);
+        $this->sliderNewsRepository->updateAndPersist($news);
+    }
 
-	/**
-	 * Walks through the current query result and replaced all news
-	 * of type "NewsOther" with the actual news record.
-	 *
-	 * @return array
-	 */
-	protected function getOverlayedNews() {
+    /**
+     * Walks through the current query result and replaced all news
+     * of type "NewsOther" with the actual news record.
+     *
+     * @return array
+     */
+    protected function getOverlayedNews()
+    {
+        $overlayedResult = [];
 
-		$overlayedResult = array();
+        /** @var SliderNews $news */
+        foreach ($this->queryResult as $news) {
 
-		/** @var \Int\NewsSlideit\Domain\Model\SliderNews $news */
-		foreach ($this->queryResult as $news) {
+            if ($news->getType() === 'tx_news_slideit_type_other') {
+                $displayNews = $news->getDisplayNews();
+                if (isset($displayNews)) {
+                    $displayNews = clone($displayNews);
+                    $displayNews->setOriginalUid($news->getUid());
+                    $overlayedResult[] = $displayNews;
+                } else {
+                    $this->disableInvalidNews($news);
+                }
+            } else {
+                $overlayedResult[] = $news;
+            }
+        }
 
-			if ($news->getType() === 'tx_news_slideit_type_other') {
-				$displayNews = $news->getDisplayNews();
-				if (isset($displayNews)) {
-					$displayNews = clone($displayNews);
-					$displayNews->setOriginalUid($news->getUid());
-					$overlayedResult[] = $displayNews;
-				} else {
-					$this->disableInvalidNews($news);
-				}
-			} else {
-				$overlayedResult[] = $news;
-			}
-		}
+        return $overlayedResult;
+    }
 
-		return $overlayedResult;
-	}
-
-	/**
-	 * Enhances the default initialize function and overlays the found
-	 * "NewsOther" records with the actual news
-	 */
-	protected function initialize() {
-
-		if (!is_array($this->queryResult)) {
-			parent::initialize();
-			$this->queryResult = $this->getOverlayedNews();
-		}
-	}
+    /**
+     * Enhances the default initialize function and overlays the found
+     * "NewsOther" records with the actual news
+     */
+    protected function initialize()
+    {
+        if (!is_array($this->queryResult)) {
+            parent::initialize();
+            $this->queryResult = $this->getOverlayedNews();
+        }
+    }
 }

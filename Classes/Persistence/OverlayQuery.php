@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Int\NewsSlideit\Persistence;
 
 /*                                                                        *
@@ -19,23 +21,24 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  * will return an OverlayQueryResult instead of a normal QueryResult
  * when calling the execute() method.
  */
-class OverlayQuery extends Query {
+class OverlayQuery extends Query
+{
+    /**
+     * Executes the parent execute() method and returns an
+     * OverlayQueryResult instead of a normal QueryResult
+     *
+     * @param $returnRawQueryResult boolean avoids the object mapping by the persistence
+     * @return OverlayQueryResult
+     */
+    public function execute($returnRawQueryResult = false)
+    {
 
-	/**
-	 * Executes the parent execute() method and returns an
-	 * OverlayQueryResult instead of a normal QueryResult
-	 *
-	 * @param $returnRawQueryResult boolean avoids the object mapping by the persistence
-	 * @return \Int\NewsSlideit\Persistence\OverlayQueryResult
-	 */
-	public function execute($returnRawQueryResult = FALSE) {
+        $result = parent::execute($returnRawQueryResult);
 
-		$result = parent::execute($returnRawQueryResult);
+        if ($result instanceof QueryResultInterface) {
+            $result = $this->objectManager->get(OverlayQueryResult::class, $this);
+        }
 
-		if ($result instanceof QueryResultInterface) {
-			$result = $this->objectManager->get('Int\\NewsSlideit\\Persistence\\OverlayQueryResult', $this);
-		}
-
-		return $result;
-	}
+        return $result;
+    }
 }

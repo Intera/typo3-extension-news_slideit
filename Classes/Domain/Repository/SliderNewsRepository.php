@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Int\NewsSlideit\Domain\Repository;
 
 /*                                                                        *
@@ -11,35 +13,38 @@ namespace Int\NewsSlideit\Domain\Repository;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \GeorgRinger\News\Domain\Repository\NewsRepository;
+use GeorgRinger\News\Domain\Repository\NewsRepository;
+use Int\NewsSlideit\Domain\Model\SliderNews;
 use Int\NewsSlideit\Persistence\OverlayQuery;
 
 /**
  * Respository for slider news
  */
-class SliderNewsRepository extends NewsRepository {
+class SliderNewsRepository extends NewsRepository
+{
+    /**
+     * Calls the parent createQuery() method and replaces the created
+     * query with an OverlayQuery.
+     *
+     * @return OverlayQuery
+     */
+    public function createQuery()
+    {
+        $query = parent::createQuery();
+        /** @noinspection PhpMethodParametersCountMismatchInspection */
+        $overlayQuery = $this->objectManager->get(OverlayQuery::class, $this->objectType);
+        $overlayQuery->setQuerySettings($query->getQuerySettings());
+        return $overlayQuery;
+    }
 
-	/**
-	 * Calls the parent createQuery() method and replaces the created
-	 * query with an OverlayQuery.
-	 *
-	 * @return \Int\NewsSlideit\Persistence\OverlayQuery
-	 */
-	public function createQuery() {
-		$query = parent::createQuery();
-		/** @noinspection PhpMethodParametersCountMismatchInspection */
-		$overlayQuery = $this->objectManager->get(OverlayQuery::class, $this->objectType);
-		$overlayQuery->setQuerySettings($query->getQuerySettings());
-		return $overlayQuery;
-	}
-
-	/**
-	 * Updates the given slider news in the repository and persists the changes directly.
-	 *
-	 * @param \Int\NewsSlideit\Domain\Model\SliderNews $sliderNews
-	 */
-	public function updateAndPersist($sliderNews) {
-		$this->update($sliderNews);
-		$this->persistenceManager->persistAll();
-	}
+    /**
+     * Updates the given slider news in the repository and persists the changes directly.
+     *
+     * @param SliderNews $sliderNews
+     */
+    public function updateAndPersist($sliderNews)
+    {
+        $this->update($sliderNews);
+        $this->persistenceManager->persistAll();
+    }
 }
