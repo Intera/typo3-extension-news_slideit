@@ -1,9 +1,0 @@
-{namespace n=GeorgRinger\News\ViewHelpers}
-{namespace ns=Int\NewsSlideit\ViewHelpers}
-<f:if condition="{settings.list.rss.disable}" then="">
-	<f:else>
-		<ns:disableRealUrl>
-			<n:headerData><link rel="alternate" type="application/rss+xml" title="{rssTitle -> f:format.htmlspecialchars()}" href="{f:uri.page(pageUid: '{contentObjectData.pid}', pageType: '2457', additionalParams:'{content: \'{contentObjectData.uid}\'}') -> f:format.htmlspecialchars()}" /></n:headerData>
-		</ns:disableRealUrl>
-	</f:else>
-</f:if>

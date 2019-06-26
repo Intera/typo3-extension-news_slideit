@@ -24,7 +24,6 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Property\Exception;
 use TYPO3\CMS\Extbase\Property\Exception\InvalidSourceException;
 use TYPO3\CMS\Extbase\Property\Exception\TargetNotFoundException;
@@ -43,21 +42,9 @@ class NewsController extends \GeorgRinger\News\Controller\NewsController
      */
     public function initializeDetailAction()
     {
-        if (!intval($this->settings['backPid'])) {
+        if (empty($this->settings['backPid'])) {
             $this->settings['backPid'] = $GLOBALS['TSFE']->id;
         }
-    }
-
-    /**
-     * Initialize common view variables.
-     * Currently only the RSS title is initialized.
-     *
-     * @param ViewInterface $view
-     */
-    public function initializeView(ViewInterface $view)
-    {
-        parent::initializeView($view);
-        $this->initializeRssTitle($view);
     }
 
     /**
@@ -109,7 +96,6 @@ class NewsController extends \GeorgRinger\News\Controller\NewsController
     {
         // Override demand settings and initialize required view variables for RSS feeds.
         if (!$this->isHtmlFormat()) {
-
             $this->view->assign('language', $this->getPageRenderer()->getLanguage());
             $this->view->assign('currentUrl', GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL'));
 
@@ -121,6 +107,7 @@ class NewsController extends \GeorgRinger\News\Controller\NewsController
             ];
         }
 
+        $this->addRssLink();
         parent::listAction($overwriteDemand);
     }
 
@@ -132,6 +119,8 @@ class NewsController extends \GeorgRinger\News\Controller\NewsController
         if (!$this->isHtmlFormat()) {
             $this->forward('list');
         }
+
+        $this->addRssLink();
 
         $demand = $this->createDemandObjectFromSettings($this->settings);
         $this->initializeDefaultLimitForCurrentActionIfNotSet($demand);
@@ -156,6 +145,8 @@ class NewsController extends \GeorgRinger\News\Controller\NewsController
         if (!$this->isHtmlFormat()) {
             $this->forward('list');
         }
+
+        $this->addRssLink();
 
         $demand = $this->createDemandObjectFromSettings($this->settings);
         $this->initializeDefaultLimitForCurrentActionIfNotSet($demand);
@@ -219,6 +210,10 @@ class NewsController extends \GeorgRinger\News\Controller\NewsController
             $settingsAsTypoScriptArray['mainContentColumns.']
         );
 
+        if (empty($mainContentColumns)) {
+            return false;
+        }
+
         $inSideColumn = !in_array(
             $contentObject->data['colPos'],
             GeneralUtility::trimExplode(',', $mainContentColumns, true)
@@ -249,28 +244,6 @@ class NewsController extends \GeorgRinger\News\Controller\NewsController
     }
 
     /**
-     * Initializes the title for the RSS feed of the current action consisting
-     * of the page title and the content element header.
-     *
-     * @param ViewInterface $view
-     */
-    protected function initializeRssTitle(ViewInterface $view)
-    {
-        if (!empty($this->settings['list']['rss']['channel']['title'])) {
-            $view->assign('rssTitle', $this->settings['list']['rss']['channel']['title']);
-            return;
-        }
-
-        $rssTitle = $this->configurationManager->getContentObject()->data['header'];
-
-        $tsfe = $this->getTypoScriptFrontendController();
-        $tsfe->generatePageTitle();
-        $rssTitle .= ' - ' . $this->getPageRenderer()->getTitle();
-
-        $view->assign('rssTitle', $rssTitle);
-    }
-
-    /**
      * Returns TRUE if the current request format is "html" or not set.
      *
      * @return bool
@@ -292,29 +265,64 @@ class NewsController extends \GeorgRinger\News\Controller\NewsController
     protected function setArgumentValue($argument, $argumentName)
     {
         try {
-
             $argument->setValue($this->request->getArgument($argumentName));
         } catch (Exception  $e) {
-
             if ($argumentName !== 'news') {
                 throw $e;
             }
 
-            if (
-                !$e->getPrevious() instanceof TargetNotFoundException
-                && !$e->getPrevious() instanceof InvalidSourceException
-            ) {
+            if (!$e->getPrevious() instanceof TargetNotFoundException
+                && !$e->getPrevious() instanceof InvalidSourceException) {
                 throw $e;
             }
         }
     }
 
-    /**
-     * @return object|PageRenderer
-     */
-    private function getPageRenderer()
+    private function addRssLink()
+    {
+        if (!empty($this->settings['list']['rss']['disable'])) {
+            return;
+        }
+
+        $contentObject = $this->configurationManager->getContentObject();
+        $contentObjectData = $contentObject->data;
+        $contentObjectUid = $contentObjectData['uid'];
+        $contentObjectPid = $contentObjectData['pid'];
+        $rssTitle = $this->getRssTitle();
+        $rssLink = $this->configurationManager->getContentObject()->typoLink_URL(
+            [
+                'parameter' => $contentObjectPid . ',2457',
+                'additionalParams' => '&content=' . $contentObjectUid,
+            ]
+        );
+
+        $this->getPageRenderer()->addHeaderData(
+            '<link rel="alternate" type="application/rss+xml" title="' . htmlspecialchars($rssTitle)
+            . '" href="' . htmlspecialchars($rssLink) . '" />'
+        );
+    }
+
+    private function getPageRenderer(): PageRenderer
     {
         $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
         return $pageRenderer;
+    }
+
+    /**
+     * Returns the title for the RSS feed of the current action consisting
+     * of the page title and the content element header.
+     *
+     * @return string
+     */
+    private function getRssTitle()
+    {
+        if (!empty($this->settings['list']['rss']['channel']['title'])) {
+            return $this->settings['list']['rss']['channel']['title'];
+        }
+
+        $rssTitle = $this->configurationManager->getContentObject()->data['header'];
+        $tsfe = $this->getTypoScriptFrontendController();
+        $tsfe->generatePageTitle();
+        return $rssTitle . ' - ' . $this->getPageRenderer()->getTitle();
     }
 }
