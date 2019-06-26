@@ -9,32 +9,6 @@ plugin.tx_news {
 		templateRootPaths.news_slideit = EXT:news_slideit/Resources/Private/Templates/
 	}
 
-	persistence {
-		classes {
-			// We unset all existing news class definitions so that all
-			// news will be returned, no matter what type they have
-			GeorgRinger\News\Domain\Model\News >
-			GeorgRinger\News\Domain\Model\NewsDefault >
-			GeorgRinger\News\Domain\Model\NewsExternal >
-			GeorgRinger\News\Domain\Model\NewsInternal >
-			Int\NewsRichteaser\Domain\Model\NewsRichteaser >
-
-			// We handle all news as slider news with the additional
-			// slider properties since they do not harm if we do not
-			// need them and it makes things easier.
-			Int\NewsSlideit\Domain\Model\SliderNews {
-				mapping {
-					tableName = tx_news_domain_model_news
-					columns {
-						tx_news_slideit_slider_teaser.mapOnProperty = sliderTeaser
-						tx_news_slideit_slider_image.mapOnProperty = sliderImage
-						tx_news_slideit_display_news.mapOnProperty = displayNews
-					}
-				}
-			}
-		}
-	}
-
 	# ====================================
 	# Settings available inside Controller and View by accessing $this->settings or {settings.xyz}
 	# ====================================
@@ -99,3 +73,27 @@ lib.tx_news_slideit.contentElementRendering {
 lib.stdheader.10.key.override = 1
 lib.stdheader.10.key.override.if.value.field = list_type
 lib.stdheader.10.key.override.if.equals = news_pi1
+
+config.tx_extbase.persistence.classes {
+  // We unset all existing news class definitions so that all
+  // news will be returned, no matter what type they have
+  GeorgRinger\News\Domain\Model\News >
+  GeorgRinger\News\Domain\Model\NewsDefault >
+  GeorgRinger\News\Domain\Model\NewsExternal >
+  GeorgRinger\News\Domain\Model\NewsInternal >
+  Int\NewsRichteaser\Domain\Model\NewsRichteaser >
+
+  // We handle all news as slider news with the additional
+  // slider properties since they do not harm if we do not
+  // need them and it makes things easier.
+  Int\NewsSlideit\Domain\Model\SliderNews {
+    mapping {
+      tableName = tx_news_domain_model_news
+      columns {
+        tx_news_slideit_slider_teaser.mapOnProperty = sliderTeaser
+        tx_news_slideit_slider_image.mapOnProperty = sliderImage
+        tx_news_slideit_display_news.mapOnProperty = displayNews
+      }
+    }
+  }
+}
