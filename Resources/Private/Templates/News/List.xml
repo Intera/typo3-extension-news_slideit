@@ -35,12 +35,10 @@
                         <description><f:format.htmlspecialchars><f:render partial="Slider/SliderTeaser" arguments="{_all}"/></f:format.htmlspecialchars></description>
                         <content:encoded>
                             <f:format.cdata>
-                                <f:cObject typoscriptObjectPath="lib.tx_news.contentElementRenderingTeaser">
-                                    {newsItem.teaserContentElementIdList}
-                                </f:cObject>
-                                <f:cObject typoscriptObjectPath="lib.tx_news.contentElementRendering">
-                                    {newsItem.contentElementIdList}
-                                </f:cObject>
+                                <f:cObject typoscriptObjectPath="lib.tx_news.contentElementRenderingTeaser"
+                                           data="{newsUid: newsItem.uidLocalized, newsPid: newsItem.pid}"/>
+                                <f:cObject typoscriptObjectPath="lib.tx_news.contentElementRendering"
+                                           data="{newsUid: newsItem.uidLocalized, newsPid: newsItem.pid}"/>
                             </f:format.cdata>
                         </content:encoded>
 
