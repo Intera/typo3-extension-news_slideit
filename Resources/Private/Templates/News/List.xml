@@ -10,19 +10,19 @@
          xmlns:content="http://purl.org/rss/1.0/modules/content/"
          xmlns:atom="http://www.w3.org/2005/Atom">
         <channel>
-            <title>{rssTitle -> f:format.htmlentities()}</title>
-            <link>{f:uri.page(pageUid: '{contentObjectData.pid}', absolute: 'true')}</link>
-            <description>{settings.list.rss.channel.description}</description>
+            <title>{rssTitle -> f:format.htmlspecialchars()}</title>
+            <link>{f:uri.page(pageUid: '{contentObjectData.pid}', absolute: 'true') -> f:format.htmlspecialchars()}</link>
+            <description>{settings.list.rss.channel.description -> f:format.htmlspecialchars()}</description>
             <language>{language}</language>
             <f:if condition="{settings.list.rss.channel.copyright}">
-                <copyright>{settings.list.rss.channel.copyright}</copyright>
+                <copyright>{settings.list.rss.channel.copyright -> f:format.htmlspecialchars()}</copyright>
             </f:if>
             <lastBuildDate><f:format.date format="r" date="now" /></lastBuildDate>
             <f:if condition="{settings.list.rss.channel.category}">
-                <category>{settings.list.rss.channel.category}</category>
+                <category>{settings.list.rss.channel.category -> f:format.htmlspecialchars()}</category>
             </f:if>
-            <atom:link href="{currentUrl -> f:format.htmlentities()}" rel="self" type="application/rss+xml"/>
-            <generator>{settings.list.rss.channel.generator}</generator>
+            <atom:link href="{currentUrl -> f:format.htmlspecialchars()}" rel="self" type="application/rss+xml"/>
+            <generator>{settings.list.rss.channel.generator -> f:format.htmlspecialchars()}</generator>
             <f:if condition="{news}">
                 <pubDate><f:format.date date="{news.0.datetime}" format="r"/></pubDate>
 
@@ -31,7 +31,7 @@
                         <guid isPermaLink="false">news-{newsItem.uniqueId}</guid>
                         <pubDate><f:format.date format="r">{newsItem.datetime}</f:format.date></pubDate>
                         <title>{newsItem.title -> f:format.htmlspecialchars()}</title>
-                        <link><f:format.htmlentities><n:link newsItem="{newsItem}" settings="{settings}" configuration="{forceAbsoluteUrl: 1}" uriOnly="1" /></f:format.htmlentities></link>
+                        <link><f:format.htmlspecialchars><n:link newsItem="{newsItem}" settings="{settings}" configuration="{forceAbsoluteUrl: 1}" uriOnly="1" /></f:format.htmlspecialchars></link>
                         <description><f:format.htmlspecialchars><f:render partial="Slider/SliderTeaser" arguments="{_all}"/></f:format.htmlspecialchars></description>
                         <content:encoded>
                             <f:format.cdata>
