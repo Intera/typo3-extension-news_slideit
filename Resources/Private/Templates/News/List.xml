@@ -39,10 +39,10 @@
 						<f:cObject typoscriptObjectPath="lib.tx_news.contentElementRendering" data="{newsUid: newsItem.uidLocalized, newsPid: newsItem.pid}" />
 					</f:format.cdata></content:encoded>
 
-					<f:if condition="{newsItem.sliderImageFromContent}">
-						<enclosure length="{newsItem.sliderImageFromContent.size}"
-							type="{newsItem.sliderImageFromContent.mimeType}"
-							url="{ns:locationHeaderUrl(path: '{newsItem.sliderImageFromContent.publicUrl}')}" />
+					<f:if condition="{newsItem.sliderImage}">
+						<enclosure length="{newsItem.sliderImage.size}"
+							type="{newsItem.sliderImage.mimeType}"
+							url="{ns:locationHeaderUrl(path: '{newsItem.sliderImage.publicUrl}')}" />
 					</f:if>
 				</item>
 			</f:for>
